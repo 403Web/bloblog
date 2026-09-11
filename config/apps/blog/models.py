@@ -19,6 +19,9 @@ class Post(models.Model):
     def __str__(self):
         return self.author.user.email
 
+    def get_snippet(self):
+        return self.content[:20] if len(self.content) >= 20 else self.content
+
 
 class PostLike(models.Model):
     user = models.ForeignKey(
