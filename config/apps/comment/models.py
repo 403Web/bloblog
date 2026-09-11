@@ -20,3 +20,23 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.user.user.email
+
+
+class CommentLike(models.Model):
+    user = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name='comment_likes'
+    )
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE, related_name='likes'
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.user.email
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'comment'], name='unique_user_comment_like'
+            )
+        ]

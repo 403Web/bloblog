@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Comment
+from .models import Comment, CommentLike
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -10,4 +10,13 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('id', 'content')
 
 
+class CommentLikeAdmin(admin.ModelAdmin):
+    model = CommentLike
+    ordering = ('-created_date',)
+    readonly_fields = ('created_date',)
+    list_display = ('user', 'id', 'comment', 'created_date')
+    search_fields = ('id',)
+
+
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentLike, CommentLikeAdmin)

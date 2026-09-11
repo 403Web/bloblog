@@ -35,7 +35,6 @@ class PostLike(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'post'],
-                name='unique_user_post_like'
+                fields=['user', 'post'], name='unique_user_post_like'
             )
         ]
