@@ -26,3 +26,4 @@ def set_user_posts_author_to_deleted_user(sender, instance, **kwargs):
             defaults={'first_name': 'Deleted User'}
         )
         instance.profile.posts.update(author=deleted_profile)
+        instance.profile.comments.update(user=deleted_profile)
