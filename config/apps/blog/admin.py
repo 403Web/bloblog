@@ -15,6 +15,7 @@ class PostLikeAdmin(admin.ModelAdmin):
     ordering = ('-created_date',)
     readonly_fields = ('created_date',)
     list_display = ('user', 'id', 'post', 'created_date')
+    search_fields = ('id',)
 
 
 admin.site.register(Post, PostAdmin)
