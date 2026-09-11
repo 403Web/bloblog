@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Profile
 from django.contrib.auth import get_user_model
+
+from .models import Profile
 
 
 User = get_user_model()

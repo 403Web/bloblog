@@ -1,8 +1,9 @@
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from .models import Profile
 from django.contrib.auth import get_user_model
 from django.conf import settings
+
+from .models import Profile
 
 
 User = get_user_model()

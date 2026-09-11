@@ -1,4 +1,5 @@
 from rest_framework.routers import DefaultRouter as Router
+
 from .views import PostViewSet
 
 router = Router()
