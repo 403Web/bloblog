@@ -10,6 +10,8 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError(_('Email is required.'))
+        if email == 'deleted_user@system.local':
+            raise ValueError(_('This email is reserved.'))
         email = self.normalize_email(email)
         user_obj = self.model(email=email, **extra_fields)
         user_obj.set_password(password)
