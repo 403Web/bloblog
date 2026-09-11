@@ -1,0 +1,78 @@
+Table User {
+  id int [pk, increment]
+  email Email [unique]
+  is_superuser bool
+  is_staff bool
+  is_active bool
+  date_joined datetime
+  updated_date datetime
+  last_login datetime
+}
+
+Table Profile {
+  id int [pk, increment]
+  user int [unique]
+  first_name varchar
+  last_name varchar
+  avatar image
+  created_date datetime
+  updated_date datetime
+}
+
+Table Post {
+  id int [pk, increment]
+  author int
+  image image
+  title varchar
+  content text
+  created_date datetime
+  updated_date datetime
+}
+
+Table Comment {
+  id int [pk, increment]
+  user int
+  post int
+  parent int [null]
+  content text
+  created_date datetime
+  updated_date datetime
+}
+
+Table PostLike {
+  id int [pk, increment]
+  user int
+  post int
+  created_date datetime
+  indexes {
+    (user, post) [unique]
+  }
+}
+
+Table CommentLike {
+  id int [pk, increment]
+  user int
+  comment int
+  created_date datetime
+  indexes {
+    (user, comment) [unique]
+  }
+}
+
+Ref: "Profile"."user" - "User"."id"
+
+Ref: "Post"."author" > "Profile"."id"
+
+Ref: "Comment"."user" > "Profile"."id"
+
+Ref: "Comment"."post" > "Post"."id"
+
+Ref: "Comment"."parent" > "Comment"."id"
+
+Ref: "PostLike"."user" > "Profile"."id"
+
+Ref: "PostLike"."post" > "Post"."id"
+
+Ref: "CommentLike"."user" > "Profile"."id"
+
+Ref: "CommentLike"."comment" > "Comment"."id"
