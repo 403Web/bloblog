@@ -3,6 +3,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser, UserManager as BaseUserManager, PermissionsMixin
 )
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -10,7 +11,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError(_('Email is required.'))
-        if email == 'deleted_user@system.local':
+        if email == settings.DELETED_USER_EMAIL:
             raise ValueError(_('This email is reserved.'))
         email = self.normalize_email(email)
         user_obj = self.model(email=email, **extra_fields)
