@@ -44,3 +44,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+    def delete(self, *args, **kwargs):
+        deleted_profile = self.get_deleted_user()
+        self.profile.posts.update(author=deleted_profile)
+        return super().delete(*args, **kwargs)
+
+    @staticmethod
+    def get_deleted_user():
+        from .profiles import Profile
+
+        deleted_user, created = User.objects.get_or_create(email=settings.DELETED_USER_EMAIL)
+        if created:
+            deleted_user.set_unusable_password()
+            deleted_user.save(update_fields=['password'])
+        deleted_profile, _ = Profile.objects.get_or_create(
+            user=deleted_user,
+            defaults={'first_name': 'Deleted User'}
+        )
+        return deleted_profile
