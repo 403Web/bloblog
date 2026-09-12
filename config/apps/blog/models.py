@@ -40,3 +40,10 @@ class PostLike(models.Model):
                 fields=['user', 'post'], name='unique_user_post_like'
             )
         ]
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, PostLike
+from .models import Post, PostLike, Category
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -19,5 +19,12 @@ class PostLikeAdmin(admin.ModelAdmin):
     search_fields = ('id',)
 
 
+class CategoryAdmin(admin.ModelAdmin):
+    model = Category
+    list_display = ('name', 'id')
+    search_fields = ('id', 'name')
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(PostLike, PostLikeAdmin)
+admin.site.register(Category, CategoryAdmin)
