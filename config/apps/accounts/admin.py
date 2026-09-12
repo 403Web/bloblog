@@ -9,7 +9,6 @@ User = get_user_model()
 
 
 class UserAdmin(BaseUserAdmin):
-    model = User
     readonly_fields = ('date_joined', 'updated_date', 'last_login')
     ordering = ('-date_joined',)
     list_display = (
@@ -41,7 +40,6 @@ class UserAdmin(BaseUserAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    model = Profile
     ordering = ('-created_date',)
     readonly_fields = ('created_date', 'updated_date')
     list_display = ('user', 'id', 'created_date', 'updated_date')
