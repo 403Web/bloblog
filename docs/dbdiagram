@@ -25,8 +25,14 @@ Table Post {
   image image
   title varchar
   content text
+  category int
   created_date datetime
   updated_date datetime
+}
+
+Table Category {
+  id int [pk, increment]
+  name varchar
 }
 
 Table Comment {
@@ -66,6 +72,8 @@ Ref: "Post"."author" > "Profile"."id"
 Ref: "Comment"."user" > "Profile"."id"
 
 Ref: "Comment"."post" > "Post"."id"
+
+Ref: "Category"."name" - "Post"."category"
 
 Ref: "Comment"."parent" > "Comment"."id"
 
