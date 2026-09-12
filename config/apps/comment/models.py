@@ -1,14 +1,12 @@
 from django.db import models
-from apps.accounts.models import Profile
-from apps.blog.models import Post
 
 
 class Comment(models.Model):
     user = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='comments'
+        'accounts.Profile', on_delete=models.CASCADE, related_name='comments'
     )
     post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='comments'
+        'blog.Post', on_delete=models.CASCADE, related_name='comments'
     )
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, related_name='replies',
@@ -24,10 +22,10 @@ class Comment(models.Model):
 
 class CommentLike(models.Model):
     user = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='comment_likes'
+        'accounts.Profile', on_delete=models.CASCADE, related_name='comment_likes'
     )
     comment = models.ForeignKey(
-        Comment, on_delete=models.CASCADE, related_name='likes'
+        'Comment', on_delete=models.CASCADE, related_name='likes'
     )
     created_date = models.DateTimeField(auto_now_add=True)
 
