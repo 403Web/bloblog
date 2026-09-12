@@ -12,6 +12,10 @@ class Post(models.Model):
     image = models.ImageField(blank=True, null=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
+    category = models.ForeignKey(
+        'Category', on_delete=models.SET_NULL, related_name='posts',
+        null=True
+    )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
