@@ -19,6 +19,15 @@ Table Profile {
   updated_date datetime
 }
 
+Table Follow {
+  following int
+  follower int
+
+  indexes {
+    (following, follower) [unique]
+  }
+}
+
 Table Post {
   id int [pk, increment]
   author int
@@ -50,6 +59,7 @@ Table PostLike {
   user int
   post int
   created_date datetime
+
   indexes {
     (user, post) [unique]
   }
@@ -60,6 +70,7 @@ Table CommentLike {
   user int
   comment int
   created_date datetime
+
   indexes {
     (user, comment) [unique]
   }
@@ -73,7 +84,7 @@ Ref: "Comment"."user" > "Profile"."id"
 
 Ref: "Comment"."post" > "Post"."id"
 
-Ref: "Category"."name" - "Post"."category"
+Ref: "Category"."id" - "Post"."category"
 
 Ref: "Comment"."parent" > "Comment"."id"
 
@@ -84,3 +95,7 @@ Ref: "PostLike"."post" > "Post"."id"
 Ref: "CommentLike"."user" > "Profile"."id"
 
 Ref: "CommentLike"."comment" > "Comment"."id"
+
+Ref: "Follow"."following" > "Profile"."id"
+
+Ref: "Follow"."follower" > "Profile"."id"
