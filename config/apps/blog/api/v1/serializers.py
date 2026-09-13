@@ -1,11 +1,16 @@
 from rest_framework import serializers
 from apps.accounts.models import Profile
 
-from ...models import Post
+from ...models import Post, Category
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
 
 class PostSerializer(serializers.ModelSerializer):
     snippet = serializers.CharField(source='get_snippet', read_only=True)
+    category = CategorySerializer()
 
     class Meta:
         model = Post
@@ -16,6 +21,7 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'snippet',
+            'category',
             'created_date',
             'updated_date'
         ]
@@ -30,6 +36,6 @@ class PostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['author'] = Profile.objects.get(
-            user__id=self.context.get('request').user.id
+            user=self.context.get('request').user
         )
         return super().create(validated_data)
