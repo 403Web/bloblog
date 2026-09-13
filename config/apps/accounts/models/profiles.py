@@ -28,12 +28,12 @@ class Follow(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.following.email
-
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=['following', 'follower'], name='unique_user_follow'
             )
         ]
+
+    def __str__(self):
+        return self.following.email

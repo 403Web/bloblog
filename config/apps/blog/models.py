@@ -35,15 +35,15 @@ class PostLike(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.user.user.email
-
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'post'], name='unique_user_post_like'
             )
         ]
+
+    def __str__(self):
+        return self.user.user.email
 
 
 class Category(models.Model):
