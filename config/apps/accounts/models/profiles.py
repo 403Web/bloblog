@@ -17,3 +17,23 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.email
+
+
+class Follow(models.Model):
+    following = models.ForeignKey(
+        'Profile', on_delete=models.CASCADE, related_name='followers'
+    )
+    follower = models.ForeignKey(
+        'Profile', on_delete=models.CASCADE, related_name='followings'
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.following.email
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['following', 'follower'], name='unique_user_follow'
+            )
+        ]

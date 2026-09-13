@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth import get_user_model
 
-from .models import Profile
+from .models import Profile, Follow
 
 
 User = get_user_model()
@@ -46,5 +46,13 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('id', 'user', 'first_name', 'last_name')
 
 
+class FollowAdmin(admin.ModelAdmin):
+    ordering = ('-created_date',)
+    readonly_fields = ('created_date',)
+    list_display = ('following', 'id', 'follower', 'created_date')
+    search_fields = ('id',)
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Follow, FollowAdmin)
