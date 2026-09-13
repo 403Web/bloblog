@@ -4,12 +4,31 @@ from ...models import Category
 
 
 categories = [
-    'Technology', 'Programming', 'Science', 'Mathematics',
-    'Artificial Intelligence', 'Cybersecurity', 'Gadgets',
-    'Internet', 'Education', 'Books', 'Movies & TV',
-    'Music', 'Gaming', 'Cars', 'Travel', 'Lifestyle',
-    'Business', 'Finance', 'Psychology', 'Philosophy',
-    'History', 'News', 'Reviews', 'Tutorials', 'Personal',
+    'Technology',
+    'Programming',
+    'Science',
+    'Mathematics',
+    'Artificial Intelligence',
+    'Cybersecurity',
+    'Gadgets',
+    'Internet',
+    'Education',
+    'Books',
+    'Movies & TV',
+    'Music',
+    'Gaming',
+    'Cars',
+    'Travel',
+    'Lifestyle',
+    'Business',
+    'Finance',
+    'Psychology',
+    'Philosophy',
+    'History',
+    'News',
+    'Reviews',
+    'Tutorials',
+    'Personal',
     'Other'
 ]
 
