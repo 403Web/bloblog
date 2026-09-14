@@ -1,0 +1,145 @@
+
+.work-sans{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body{
+    height: 10000px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.custom-toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 28px;
+    cursor: pointer;
+    }
+
+.custom-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+
+    .custom-toggle .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e0e0e0;
+    border-radius: 34px;
+    transition: 0.3s;
+    }
+
+    .custom-toggle .slider::before {
+    content: "";
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .custom-toggle .sun-icon {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    color: #555;
+    transition: 0.3s;
+    z-index: 2;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .custom-toggle input:checked + .slider {
+    background-color: #4a90e2;
+    }
+
+    .custom-toggle input:checked + .slider::before {
+    transform: translateX(20px);
+    }
+
+    .custom-toggle input:checked + .slider .sun-icon {
+    left: 27px;
+    color: #fff;
+    }
+
+/* start nav  */
+.nav-item>a{
+    color: gray;
+}
+
+.nav{
+    height: 30px;
+}
+
+.search-bar{
+    width: 95%;
+}
+
+.nav-item:hover>a{
+    color: #212529;
+}
+
+/* start header  */
+
+.header-image{
+    background: url(imgs/header-Image.png);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 500px;
+    max-width: 1200px;
+    min-width: 100px;
+    border-radius: 10px;
+}
+
+.header-inf{
+    color: gray;
+}
+
+.header-comment{
+    width: 30%;
+    top: 70%;
+    left: 15%;
+}
+
+@media (max-width: 991.98px) {
+    .header-comment{
+        width: 75%;
+    }
+}
+.header{
+    margin-bottom: 130px;
+}
+
+/* start blog */
+.blog{
+    width: 30%;
+}
+
+@media (max-width: 1199.98px) {
+    .blog{
+        width: 45%!important;
+    }
+}
+
+@media (max-width: 767.98px) { 
+    .blog{
+        width: 100%!important;
+    }
+}
