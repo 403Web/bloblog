@@ -17,16 +17,16 @@
     width: 48px;
     height: 28px;
     cursor: pointer;
-    }
+}
 
 .custom-toggle input {
     opacity: 0;
     width: 0;
     height: 0;
-    }
+}
 
-    .custom-toggle .slider {
-    position: absolute;
+.custom-toggle .slider {
+    position: absolute;  
     top: 0;
     left: 0;
     right: 0;
@@ -34,9 +34,9 @@
     background-color: #e0e0e0;
     border-radius: 34px;
     transition: 0.3s;
-    }
+}
 
-    .custom-toggle .slider::before {
+.custom-toggle .slider::before {
     content: "";
     position: absolute;
     height: 22px;
@@ -47,34 +47,46 @@
     border-radius: 50%;
     transition: 0.3s;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
+}
 
-    .custom-toggle .sun-icon {
+.custom-toggle .icon {
     position: absolute;
     top: 7px;
-    left: 7px;
-    color: #555;
     transition: 0.3s;
     z-index: 2;
     pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    }
+}
 
-    .custom-toggle input:checked + .slider {
-    background-color: #4a90e2;
-    }
+.custom-toggle .sun-icon {
+    left: 7px;
+    color: #555;
+    opacity: 1;
+}
 
-    .custom-toggle input:checked + .slider::before {
-    transform: translateX(20px);
-    }
-
-    .custom-toggle input:checked + .slider .sun-icon {
+.custom-toggle .moon-icon {
     left: 27px;
-    color: #fff;
-    }
+    color: #555;
+    opacity: 0;
+}
 
+.custom-toggle input:checked + .slider {
+    background-color: #4a90e2;
+}
+
+.custom-toggle input:checked + .slider::before {
+    transform: translateX(20px);
+}
+
+.custom-toggle input:checked + .slider .sun-icon {
+    opacity: 0;
+}
+
+.custom-toggle input:checked + .slider .moon-icon {
+    opacity: 1;
+}
 /* start nav  */
 .nav-item>a{
     color: gray;
@@ -139,10 +151,35 @@
     .blog{
         width: 100%!important;
     }
+    .footer-items{
+        width: 100%;
+        
+        margin-top: 10px;
+    }
+    .footer-logo{
+        width: 100%;
+    }
 }
 
 /* start footer  */
+.footer-about{
+    width: 25%;
+}
 
 .footer-logo-title{
     margin-right: -4px;
+}
+
+@media (max-width: 1199.98px) {
+    .footer-about{
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    
+}
+
+@media (max-width: 767.98px) { 
+    .footer-form-box{
+        width: 100%;
+    }
 }
