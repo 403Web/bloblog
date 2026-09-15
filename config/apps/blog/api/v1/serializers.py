@@ -13,6 +13,7 @@ class PostSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     snippet = serializers.CharField(source='get_snippet', read_only=True)
     category = CategorySerializer()
+    likes = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -25,6 +26,7 @@ class PostSerializer(serializers.ModelSerializer):
             'content',
             'snippet',
             'category',
+            'likes',
             'created_date',
             'updated_date'
         ]
@@ -33,6 +35,7 @@ class PostSerializer(serializers.ModelSerializer):
             'url',
             'author',
             'snippet',
+            'likes',
             'created_date',
             'updated_date'
         ]
@@ -46,6 +49,9 @@ class PostSerializer(serializers.ModelSerializer):
             'absolute': absolute,
             'relative': relative
         }
+
+    def get_likes(self, obj):
+        return obj.likes.count()
 
     def to_representation(self, instance):
         request = self.context.get('request')

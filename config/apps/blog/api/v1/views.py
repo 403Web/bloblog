@@ -19,7 +19,7 @@ class PostViewSet(ModelViewSet):
     pagination_class = PostPagination
     filterset_fields = ['category', 'category__name']
     search_fields = ['title', 'content']
-    ordering_fields = ['created_date']
+    ordering_fields = ['created_date', 'likes']
 
 
 class CategoryViewSet(ModelViewSet):
