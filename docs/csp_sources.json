@@ -1,0 +1,20 @@
+{
+    "font-src": [
+        {
+            "url": "https://example.com",
+            "description": "example"
+        }
+    ],
+    "style-src": [
+        {
+            "url": "https://example.com",
+            "description": "example"
+        }
+    ],
+    "script-src": [
+        {
+            "url": "https://example.com",
+            "description": "example"
+        }
+    ]
+}
