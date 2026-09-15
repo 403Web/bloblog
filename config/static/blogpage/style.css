@@ -108,6 +108,9 @@
 .nav-item:hover>a{
     color: black;
 }
+.logout-alert{
+    bottom: 0;
+}
 
 /* start header  */
 .my-cont{

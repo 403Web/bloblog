@@ -104,6 +104,9 @@
     color: black;
 }
 
+.logout-alert{
+    bottom: 0;
+}
 /* start header  */
 
 .header-image{
