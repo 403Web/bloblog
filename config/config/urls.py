@@ -22,7 +22,8 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api-auth", include("rest_framework.urls")),
-    path('blog/', include('apps.blog.urls'))
+    path('blog/', include('apps.blog.urls')),
+    path('api/v1/blog/', include('apps.blog.api.v1.urls'))
 ]
 
 # serving media in dev
