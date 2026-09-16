@@ -14,6 +14,8 @@ def create_profile_for_user(sender, instance, created, **kwargs):
     if created and instance.email != settings.DELETED_USER_EMAIL:
         Profile.objects.create(user=instance)
 
+    # TODO: Profile object must contain default "name" field while being created
+
 
 @receiver(pre_delete, sender=User)
 def set_user_posts_author_to_deleted_user(sender, instance, **kwargs):

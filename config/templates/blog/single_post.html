@@ -10,7 +10,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'blog_single.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/blog_single.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,13 +33,13 @@
                 <span class="badge text-bg-primary fw-light p-2">{{ post.category.name }}</span>
                 <h3 class="fw-bold fs-1 my-3">{{ post.title }}</h3>
                 <div>
-                    <img class="rounded-circle me-1" src="{{ post.author.avatar.url }}" alt="">
-                    <span class="small text-secondary">{{ post.author.get_full_name }}</span>
-                    <span class="small text-secondary ms-3">{{ post.created_date }}</span>
+                    <img class="rounded-circle me-1" src="{{ post.author.avatar.url }}" width="32px" alt="">
+                    <span class="small text-secondary">{{ post.author.name }}</span>
+                    <span class="small text-secondary ms-3">{{ post.created_date | date:'M d, Y | H:i A' }}</span>
                 </div>
             </div>
             <div>
-                <img src="../../static/blogpage/imgs/Image-header.png" class="mt-4" width="100%" alt="">
+                <img src="{% static 'imgs/Image-header.png' %}" class="mt-4" width="100%" alt="">
             </div>
         </div>
     </header>
@@ -59,7 +59,7 @@
                 <div class="bg-secondary-subtle rounded-2 border-4 p-4 border-start border-secondary-subtle">
                     <p class="fst-italic fs-4 text-secondary-emphasis">“ Traveling can expose you to new environments and potential health risks, so it's crucial to take precautions to stay safe and healthy. ”</p>
                 </div>
-                <img src="../../static/blogpage/imgs/Image-content.png" width="100%" class="my-4" alt="">
+                <img src="{% static 'imgs/Image-content.png' %}" width="100%" class="my-4" alt="">
                 <span class="fw-bold fs-4 text-dark-emphasis work-sans mt-1">Pack Lightly and Smartly</span>
                 <p class="my-4">Packing can be a daunting task, but with some careful planning and smart choices, you can pack light and efficiently. Start by making a packing list and sticking to it, focusing on versatile and comfortable clothing that can be mixed and matched. Invest in quality luggage and packing organizers to maximize space and minimize wrinkles.</p>
                 <span class="fw-bold fs-4 text-dark-emphasis work-sans mt-1">Stay Safe and Healthy</span>

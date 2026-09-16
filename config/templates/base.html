@@ -51,16 +51,16 @@
                 <div class="dropdown col-1">
                     <button
                         class="btn border-0 p-0"type="button"data-bs-toggle="dropdown"aria-expanded="false">
-                        <img src="../static/imgs/header-pfp.png" class="rounded-circle img-thumbnail" width="50px" height="50px" alt="">
+                        <img src="{{ request.user.profile.avatar.url }}" class="rounded-circle img-thumbnail" width="50px" height="50px" alt="">
                     </button>
                     <div class="dropdown-menu" style="width: 250px;">
                         <div class="d-flex flex-column align-items-center">
                             <div>
-                                <img src="../static/imgs/header-pfp.png" width="50px" height="50px" class="rounded-circle img-thumbnail" alt="">
+                                <img src="{{ request.user.profile.avatar.url }}" width="50px" height="50px" class="rounded-circle img-thumbnail" alt="">
                             </div>
                             <div class="d-flex align-items-center py-2">
                                 <span class="spinner-grow-sm spinner-grow text-success me-1"></span>
-                                <span class="small fw-semibold">theCOOK</span>
+                                <span class="small fw-semibold">{{ request.user.profile.first_name }}</span>
                             </div>
                             <ul class="list-unstyled w-100 flex-column px-3">
                                 <li class="">
@@ -131,14 +131,14 @@
                 <div class="me-5 footer-about">
                     <span class="fs-5 fw-semibold">About</span>
                     <p class="my-4 text-secondary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-                    <div>
+                    <!--<div>
                         <span class="fw-bold">Email:</span>
                         <span class="text-secondary">info@403web.net</span>
                     </div>
                     <div>
                         <span class="fw-bold">Phone:</span>
                         <span class="text-secondary"> 880 123 456 789</span>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="ms-lg-5 mb-3 mb-lg-0">
                     <span class="fs-5 fw-semibold">Quick Links</span>
@@ -190,9 +190,10 @@
                     <div class="rounded-2 d-flex align-items-center flex-column bg-light-subtle p-4 ms-4 footer-form">
                         <span class="d-block fs-5 fw-semibold mb-1">Weekly Newsletter</span>
                         <span class="mb-4 d-block text-secondary">Get blog articles and offers via email</span>
-                        <form action="" class="w-100">
-                            <Input type="email" placeholder="Your Email" class="form-control border border-1 border-secondary"></Input>
-                            <input type="submit" class="btn btn-primary w-100 mt-3">
+                        <form method="post" action="{% url 'core:newsletter' %}" class="w-100">
+                            {% csrf_token %}
+                            <Input type="email" name="email" placeholder="Your Email" class="form-control border border-1 border-secondary"></Input>
+                            <input type="submit" value="Submit" class="btn btn-primary w-100 mt-3">
                         </form>
                     </div>
                 </div>
@@ -235,7 +236,7 @@
     </footer>
 
 
-    <a class="bg-primary text-decoration-none rounded-circle position-fixed p-2 d-flex justify-content-center align-items-center newpost-button">
+    <a href="" class="bg-primary text-decoration-none rounded-circle position-fixed p-2 d-flex justify-content-center align-items-center newpost-button">
         <i class="bi bi-pencil text-light fs-5"></i>
     </a>
 
