@@ -44,7 +44,7 @@
             </div>
             <ul class="col-4 d-none d-md-flex nav justify-content-center border border-2 border-black align-items-center p-0">
                 <li class="nav-item">
-                    <a href="" class="nav-link  py-0 nav-buttons">Home</a>
+                    <a href="{% url 'core:index' %}" class="nav-link  py-0 nav-buttons">Home</a>
                 </li>
                 <li class="nav-item">
                     <a href="" class="nav-link  py-0 nav-buttons">Blog</a>
@@ -155,7 +155,7 @@
                     <span class="fs-5 fw-semibold">Quick Links</span>
                     <ul class="list-unstyled mt-4">
                         <li class=" mt-2">
-                            <a href="" class="text-decoration-none text-dark-emphasis">Home</a>
+                            <a href="{% url 'core:index' %}" class="text-decoration-none text-dark-emphasis">Home</a>
                         </li>
                         <li class=" mt-2">
                             <a href="" class="text-decoration-none text-dark-emphasis">About</a>
@@ -292,7 +292,7 @@
                 <div class="offcanvas-body">
                     <ul class="nav">
                         <li class="nav-item w-100">
-                            <a href="" class="nav-link">Home</a>
+                            <a href="{% url 'core:index' %}" class="nav-link">Home</a>
                         </li>
                         <hr class="border border-dark w-75">
                         <li class="nav-item w-100">
