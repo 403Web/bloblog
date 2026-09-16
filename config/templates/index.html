@@ -6,17 +6,20 @@
     <header class="row mt-4 header container mx-auto">
         <div>
             <div class="col-12 header-image">
+                <a href="">
+                <img class="rounded-3" src="{{ posts.popular.image.url }}">
+                </a>
                 <div class="bg-light-subtle position-absolute rounded header-comment p-3 shadow">
-                    <div class="badge text-bg-primary fw-light my-2">Technology</div>
+                    <div class="badge text-bg-primary fw-light my-2">{{ posts.popular.category.name }}</div>
                     <div>
                         <p class="text-dark-emphasis my-2 fs-4 fw-bold">
-                        The Impact of Technology on the Workplace: How Technology is Changing
+                        {{ posts.popular.title }}
                         </p>
                     </div>
                     <div class="my-3">
-                        <img src="../static/imgs/header-pfp.png" width="36" height="36" alt="">
-                        <span class="small header-inf">Jason Francisco</span>
-                        <span class="small header-inf">August 20, 2022</span>
+                        <img class="rounded-circle" src="{{ posts.popular.author.avatar.url }}" width="36" height="36" alt="">
+                        <span class="small header-inf">{{ posts.popular.author.get_full_name }}</span>
+                        <span class="small header-inf">{{ posts.popular.created_date }}</span>
                     </div>
                 </div>
             </div>
@@ -30,63 +33,23 @@
                 <span class="fw-bold fs-4">Latest Posts</span>
             </div>
             <div class="d-flex blogs flex-wrap">
-                <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
-                    <img src="../static/imgs/Rectangle 38.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="badge text-bg-primary fw-light my-2">Technology</div>
-                        <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                        The Impact of Technology on the Workplace: How Technology is Changing
-                        </p>
-                        <div class="my-3">
-                        <img src="../static/imgs/header-pfp.png" width="36" height="36" alt="">
-                        <span class="small header-inf">Jason Francisco</span>
-                        <span class="small header-inf">August 20, 2022</span>
+                {% for post in posts.latest %}
+                    <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
+                            <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
+                            {{ post.title }}
+                            </p>
+                            <div class="my-3">
+                            <img src="../static/imgs/header-pfp.png" width="36" height="36" alt="">
+                            <span class="small header-inf">{{ post.author.get_full_name }}</span>
+                            <span class="small header-inf">{{ post.created_date }}</span>
+                        </div>
+                        </div>
                     </div>
-                    </div>
+                {% endfor %}
                 </div>
-                <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
-                    <img src="../static/imgs/Rectangle 38.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="badge text-bg-primary fw-light my-2">Technology</div>
-                        <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                        The Impact of Technology on the Workplace: How Technology is Changing
-                        </p>
-                        <div class="my-3">
-                        <img src="../static/imgs/header-pfp.png" width="36" height="36" alt="">
-                        <span class="small header-inf">Jason Francisco</span>
-                        <span class="small header-inf">August 20, 2022</span>
-                    </div>
-                    </div>
-                </div>
-                <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
-                    <img src="../static/imgs/Rectangle 38.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="badge text-bg-primary fw-light my-2">Technology</div>
-                        <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                        The Impact of Technology on the Workplace: How Technology is Changing
-                        </p>
-                        <div class="my-3">
-                        <img src="../static/imgs/header-pfp.png" width="36" height="36" alt="">
-                        <span class="small header-inf">Jason Francisco</span>
-                        <span class="small header-inf">August 20, 2022</span>
-                    </div>
-                    </div>
-                </div>
-                <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
-                    <img src="../static/imgs/Rectangle 38.png" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <div class="badge text-bg-primary fw-light my-2">Technology</div>
-                        <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                        The Impact of Technology on the Workplace: How Technology is Changing
-                        </p>
-                        <div class="my-3">
-                        <img src="../static/imgs/header-pfp.png" width="36" height="36" alt="">
-                        <span class="small header-inf">Jason Francisco</span>
-                        <span class="small header-inf">August 20, 2022</span>
-                    </div>
-                    </div>
-                </div>
-            </div>
             <div class="d-flex justify-content-center align-items-center">
                 <a class="p-2 small text-decoration-none rounded border border-1 text-secondary" href="">View All Posts</a>
             <!-- </div> -->

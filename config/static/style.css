@@ -110,14 +110,22 @@
 /* start header  */
 
 .header-image{
-    background: url(imgs/header-Image.png);
+    /* background: url(imgs/header-Image.png);
     background-position: right;
     background-repeat: no-repeat;
     background-size: cover;
     height: 500px;
     max-width: 1200px;
-    min-width: 100px;
+    min-width: 100px; */
     border-radius: 10px;
+}
+
+.header-image>a>img {
+    width: 100%;
+    height: 80vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .header-inf{
@@ -171,6 +179,13 @@
 
 .footer-logo-title{
     margin-right: -4px;
+}
+
+.newpost-button {
+    top: 90%;
+    left: 95%;
+    width: 50px;
+    height: 50px;
 }
 
 @media (max-width: 1199.98px) {
