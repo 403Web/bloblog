@@ -1,4 +1,7 @@
-from django.http import HttpResponse
+from django.views.generic import DetailView
+from .models import Post
 
-def index_view(request):
-    return HttpResponse('<p>blog index</p>')
+
+class PostRetrieveView(DetailView):
+    model = Post
+    template_name = 'blog/single_post.html'
