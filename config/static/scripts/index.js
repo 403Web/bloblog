@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         body.setAttribute('data-bs-theme', theme);
         localStorage.setItem('theme', theme);
         
-        console.log('تم فعلی:', theme);
+        console.log('current theme:', theme);
     });
 });
 
@@ -36,7 +36,7 @@ alertPlaceholder.append(wrapper)
 const alertTrigger = document.getElementById('liveAlertBtn')
 if (alertTrigger) {
 alertTrigger.addEventListener('click', () => {
-    appendAlert('You have loged out successfully!', 'success')
+    appendAlert('You have logged out successfully!', 'success')
 })
 }
 
