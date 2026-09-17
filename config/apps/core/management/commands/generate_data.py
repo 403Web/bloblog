@@ -12,15 +12,18 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('-i', '--iteration', type=int, default=30)
         parser.add_argument('-c', '--count', type=int, default=3)
+        parser.add_argument('-t', '--timeout', type=int, default=3)
 
     def handle(self, *args, **options):
         creator = CreatePostCommand()
         post_count = 0
 
-        self.stdout.write('Running python manage.py create_post...')
+        self.stdout.write('Running python manage.py createpost...')
 
         for _ in range(options.get('iteration')):
-            post_count += creator.handle_post_create(options.get('count'))
+            post_count += creator.handle_post_create(
+                options.get('count'), timeout=options.get('timeout')
+            )
 
         if post_count != 0:
             self.stdout.write(

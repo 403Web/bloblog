@@ -22,8 +22,9 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-c', '--count', type=int, default=3)
+        parser.add_argument('-t', '--timeout', type=int, default=3)
 
-    def handle_post_create(self, count):
+    def handle_post_create(self, count, timeout):
         post_count = 0
 
         CATEGORIES = tuple(Category.objects.all())
@@ -44,17 +45,15 @@ class Command(BaseCommand):
         try:
             profile_obj.avatar.save(
                 f'avatar_{profile_obj.name}.png',
-                ContentFile(requests.get(url, timeout=3).content)
+                ContentFile(requests.get(url, timeout=timeout).content)
             )
         except requests.exceptions.Timeout:
             self.stdout.write(
-                self.style.WARNING(' Request timed out for image, SKIPPING...'),
-                ending=''
+                self.style.WARNING(' Request timed out for avatar, SKIPPING...')
             )
         except requests.exceptions.RequestException:
             self.stdout.write(
-                self.style.WARNING(' Request failed for image, SKIPPING...'),
-                ending=''
+                self.style.WARNING(' Request failed for avatar, SKIPPING...')
             )
 
         for idx in range(count):
@@ -76,7 +75,7 @@ class Command(BaseCommand):
             try:
                 post.image.save(
                     f'img_{profile_obj.name}_{idx + 1}.jpg',
-                    ContentFile(requests.get(url, timeout=3).content)
+                    ContentFile(requests.get(url, timeout=timeout).content)
                 )
             except requests.exceptions.Timeout:
                 self.stdout.write(
@@ -95,7 +94,9 @@ class Command(BaseCommand):
         return post_count
 
     def handle(self, *args, **options):
-        post_count = self.handle_post_create(count=options.get('count'))
+        post_count = self.handle_post_create(
+            count=options.get('count'), timeout=options.get('timeout')
+        )
 
         if post_count != 0:
             self.stdout.write(f'{post_count} POST OBJECTS HAVE BEEN CREATED SUCCESSFULLY.')
