@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from ...models import Category
 
 
-categories = [
+CATEGORIES = [
     'Technology',
     'Programming',
     'Science',
@@ -43,26 +43,28 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         cat_count = 0
-        for cat in categories:
+
+        for cat in CATEGORIES:
             if Category.objects.filter(name=cat).exists():
                 self.stdout.write(
-                    f'Category object "{self.style.SUCCESS(cat)}" already exists... '
-                    f'{self.style.WARNING("SKIPPING")}'
+                    f'Category object "{self.style.SUCCESS(cat)}" already exists...'
+                    f'{self.style.WARNING(" SKIPPING")}'
                 )
                 continue
+
             self.stdout.write(
                 f'Creating category object "{self.style.WARNING(cat)}"...',
                 ending=''
             )
+
             Category.objects.create(name=cat)
             self.stdout.write(self.style.SUCCESS(' DONE'))
             cat_count += 1
+
         if cat_count == 0:
-            self.stdout.write('No category object created.')
-        elif cat_count == 1:
-            self.stdout.write('1 category object has been created successfully.')
+            self.stdout.write('NO CATEGORY OBJECT CREATED.')
         else:
             self.stdout.write(
-                f'{cat_count} category objects have been created successfully.'
+                f'{cat_count} CATEGORY OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
             )
         

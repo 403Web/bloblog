@@ -12,9 +12,9 @@ User = get_user_model()
 @receiver(post_save, sender=User)
 def create_profile_for_user(sender, instance, created, **kwargs):
     if created and instance.email != settings.DELETED_USER_EMAIL:
-        Profile.objects.create(user=instance)
-
-    # TODO: Profile object must contain default "name" field while being created
+        Profile.objects.create(
+            user=instance, name=instance.email.split('@')[0]
+        )
 
 
 @receiver(pre_delete, sender=User)
@@ -26,7 +26,7 @@ def set_user_posts_author_to_deleted_user(sender, instance, **kwargs):
             deleted_user.save(update_fields=['password'])
         deleted_profile, _ = Profile.objects.get_or_create(
             user=deleted_user,
-            defaults={'first_name': 'Deleted User'}
+            defaults={'name': 'Deleted User'}
         )
         instance.profile.posts.update(author=deleted_profile)
         instance.profile.comments.update(user=deleted_profile)
