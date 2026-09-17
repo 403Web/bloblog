@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = 'Generates multiple posts with different users using create_post command'
 
     def add_arguments(self, parser):
-        parser.add_argument('-i', '--iteration', type=int, default=10)
+        parser.add_argument('-i', '--iteration', type=int, default=30)
         parser.add_argument('-c', '--count', type=int, default=3)
 
     def handle(self, *args, **options):

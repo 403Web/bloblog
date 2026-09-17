@@ -6,5 +6,5 @@ app_name = 'blog'
 
 
 urlpatterns = [
-    path('posts/<pk>/', PostRetrieveView.as_view(), name='post_detail')
+    path('posts/<int:pk>/', PostRetrieveView.as_view(), name='post_detail')
 ]
