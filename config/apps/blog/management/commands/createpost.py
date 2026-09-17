@@ -24,7 +24,10 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
         self.fake = Faker()
 
-    def handle_post_create(self):
+    def add_arguments(self, parser):
+        parser.add_argument('-c', '--count', type=int, default=3)
+
+    def handle_post_create(self, count):
         post_count = 0
 
         CATEGORIES = tuple(Category.objects.all())
@@ -42,7 +45,7 @@ class Command(BaseCommand):
         )
         profile_obj = Profile.objects.get(user=user_obj)
 
-        for idx in range(3):
+        for idx in range(count):
             width = random.randint(100, 1000)
             height = random.randint(100, 800)
             color = random.choice(COLORS)
@@ -82,7 +85,7 @@ class Command(BaseCommand):
         return post_count
 
     def handle(self, *args, **options):
-        post_count = self.handle_post_create()
+        post_count = self.handle_post_create(count=options.get('count'))
 
         if post_count != 0:
             self.stdout.write(f'{post_count} POST OBJECTS HAVE BEEN CREATED SUCCESSFULLY.')

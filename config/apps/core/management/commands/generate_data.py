@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from apps.core.management.commands.create_post import Command as CreatePostCommand
+from apps.blog.management.commands.createpost import Command as CreatePostCommand
 
 
 class Command(BaseCommand):
@@ -9,14 +9,18 @@ class Command(BaseCommand):
     """
     help = 'Generates multiple posts with different users using create_post command'
 
+    def add_arguments(self, parser):
+        parser.add_argument('-i', '--iteration', type=int, default=10)
+        parser.add_argument('-c', '--count', type=int, default=3)
+
     def handle(self, *args, **options):
         creator = CreatePostCommand()
         post_count = 0
 
         self.stdout.write('Running python manage.py create_post...')
 
-        for _ in range(7):
-            post_count += creator.handle_post_create()
+        for _ in range(options.get('iteration')):
+            post_count += creator.handle_post_create(options.get('count'))
 
         if post_count != 0:
             self.stdout.write(
