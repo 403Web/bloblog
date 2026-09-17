@@ -8,10 +8,6 @@ import requests
 import random
 
 
-COLORS = ('white', 'blue', 'red', 'yellow', 'cyan', 'brown')
-FORMATS = ('png', 'jpg', 'jpeg')
-
-
 class Command(BaseCommand):
     """
     A command to initialize the database with fake and random data for testing,
@@ -44,13 +40,27 @@ class Command(BaseCommand):
             email=self.fake.email(), password='a/@234a/?'
         )
         profile_obj = Profile.objects.get(user=user_obj)
+        url = f'https://api.dicebear.com/9.x/avataaars/png?seed={profile_obj.name}'
+        try:
+            profile_obj.avatar.save(
+                f'avatar_{profile_obj.name}.png',
+                ContentFile(requests.get(url, timeout=3).content)
+            )
+        except requests.exceptions.Timeout:
+            self.stdout.write(
+                self.style.WARNING(' Request timed out for image, SKIPPING...'),
+                ending=''
+            )
+        except requests.exceptions.RequestException:
+            self.stdout.write(
+                self.style.WARNING(' Request failed for image, SKIPPING...'),
+                ending=''
+            )
 
         for idx in range(count):
             width = random.randint(100, 1000)
             height = random.randint(100, 800)
-            color = random.choice(COLORS)
-            img_format = random.choice(FORMATS)
-            url = f'https://placehold.co/{width}x{height}/{color}/black.{img_format}'
+            url = f'https://random.imagecdn.app/{width}/{height}'
 
             self.stdout.write(
                 f'Creating {idx + 1} post(s) for user "{profile_obj.name}"...',
@@ -65,7 +75,7 @@ class Command(BaseCommand):
             )
             try:
                 post.image.save(
-                    f'img_{profile_obj.name}_{idx + 1}.{img_format}',
+                    f'img_{profile_obj.name}_{idx + 1}.jpg',
                     ContentFile(requests.get(url, timeout=3).content)
                 )
             except requests.exceptions.Timeout:
