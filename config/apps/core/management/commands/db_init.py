@@ -12,7 +12,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
+            self.stdout.write('Running python manage.py createcategories...')
             call_command('createcategories')
+            self.stdout.write('Running python manage.py create_deleted_user...')
             call_command('create_deleted_user')
         except Exception as error:
             raise CommandError(f'INITIALIZATION FAILED: {error}')

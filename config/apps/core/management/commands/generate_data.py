@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from apps.blog.management.commands.createpost import Command as CreatePostCommand
+import random
 
 
 class Command(BaseCommand):
@@ -11,7 +12,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-i', '--iteration', type=int, default=30)
-        parser.add_argument('-c', '--count', type=int, default=3)
+        parser.add_argument('-c', '--count', type=int, default=None)
         parser.add_argument('-t', '--timeout', type=int, default=3)
 
     def handle(self, *args, **options):
@@ -22,7 +23,8 @@ class Command(BaseCommand):
 
         for _ in range(options.get('iteration')):
             post_count += creator.handle_post_create(
-                options.get('count'), timeout=options.get('timeout')
+                options.get('count') or random.randint(1, 3),
+                timeout=options.get('timeout')
             )
 
         if post_count != 0:

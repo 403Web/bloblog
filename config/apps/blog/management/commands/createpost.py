@@ -37,16 +37,26 @@ class Command(BaseCommand):
             )
             return 0
 
+        self.stdout.write('Creating new user object...', ending='')
         user_obj = get_user_model().objects.create_user(
             email=self.fake.email(), password='a/@234a/?'
         )
+        self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
+        self.stdout.write(f'email: {user_obj.email}')
+
+        self.stdout.write('Getting user profile object...', ending='')
         profile_obj = Profile.objects.get(user=user_obj)
+        self.stdout.write(self.style.SUCCESS('SUCCESSFUL'))
+        self.stdout.write(f'name: {profile_obj.name}')
+
         url = f'https://api.dicebear.com/9.x/avataaars/png?seed={profile_obj.name}'
+        self.stdout.write('Setting avatar for user profile object...', ending='')
         try:
             profile_obj.avatar.save(
                 f'avatar_{profile_obj.name}.png',
                 ContentFile(requests.get(url, timeout=timeout).content)
             )
+            self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
         except requests.exceptions.Timeout:
             self.stdout.write(
                 self.style.WARNING(' Request timed out for avatar, SKIPPING...')
