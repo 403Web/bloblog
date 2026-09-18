@@ -4,8 +4,17 @@ from apps.accounts.models import Profile
 from apps.blog.models import Post, Category
 from faker import Faker
 from django.contrib.auth import get_user_model
+from PIL import Image, UnidentifiedImageError
+from io import BytesIO
 import requests
 import random
+
+
+RATIOS = [
+    (16, 9),
+    (4, 3),
+    (3, 2)
+]
 
 
 class Command(BaseCommand):
@@ -32,10 +41,11 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.ERROR(
                     'Category objects have not been found.'
-                    ' Try running "python manage.py createcategories" first.'
+                    ' Try running "python manage.py createcategories" or'
+                    ' "python manage.py db_init" first.'
                 )
             )
-            return 0
+            return False
 
         self.stdout.write('Creating new user object...', ending='')
         user_obj = get_user_model().objects.create_user(
@@ -46,30 +56,51 @@ class Command(BaseCommand):
 
         self.stdout.write('Getting user profile object...', ending='')
         profile_obj = Profile.objects.get(user=user_obj)
-        self.stdout.write(self.style.SUCCESS('SUCCESSFUL'))
+        self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
         self.stdout.write(f'name: {profile_obj.name}')
 
-        url = f'https://api.dicebear.com/9.x/avataaars/png?seed={profile_obj.name}'
+        size = random.randint(150, 600)
+        url = f'https://i.pravatar.cc/{size}?img={profile_obj.name}'
         self.stdout.write('Setting avatar for user profile object...', ending='')
         try:
-            profile_obj.avatar.save(
-                f'avatar_{profile_obj.name}.png',
-                ContentFile(requests.get(url, timeout=timeout).content)
-            )
-            self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
+            response = requests.get(url, timeout=timeout)
+
+            if (
+                response.status_code == 200 and
+                response.headers.get('Content-Type', '').startswith('image/')
+            ):
+                try:
+                    img_format = Image.open(BytesIO(response.content)).format.lower()
+                    profile_obj.avatar.save(
+                        f'avatar_{profile_obj.name}.{img_format}',
+                        ContentFile(response.content)
+                    )
+
+                    self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
+                except UnidentifiedImageError:
+                    self.stdout.write(
+                        self.style.WARNING(' Invalid avatar response, SKIPPING')
+                    )
+
+            else:
+                self.stdout.write(
+                    self.style.WARNING(' Invalid avatar response, SKIPPING')
+                )
+
         except requests.exceptions.Timeout:
             self.stdout.write(
-                self.style.WARNING(' Request timed out for avatar, SKIPPING...')
+                self.style.WARNING(' Request timed out for avatar, SKIPPING')
             )
         except requests.exceptions.RequestException:
             self.stdout.write(
-                self.style.WARNING(' Request failed for avatar, SKIPPING...')
+                self.style.WARNING(' Request failed for avatar, SKIPPING')
             )
 
         for idx in range(count):
-            width = random.randint(100, 1000)
-            height = random.randint(100, 800)
-            url = f'https://random.imagecdn.app/{width}/{height}'
+            ratio = random.choice(RATIOS)
+            width = random.randint(600, 1200)
+            height = int(width * (ratio[1] / ratio[0]))
+            url = f'https://loremflickr.com/{width}/{height}'
 
             self.stdout.write(
                 f'Creating {idx + 1} post(s) for user "{profile_obj.name}"...',
@@ -83,10 +114,30 @@ class Command(BaseCommand):
                 category=random.choice(CATEGORIES)
             )
             try:
-                post.image.save(
-                    f'img_{profile_obj.name}_{idx + 1}.jpg',
-                    ContentFile(requests.get(url, timeout=timeout).content)
-                )
+                response = requests.get(url, timeout=timeout)
+
+                if (
+                    response.status_code == 200 and
+                    response.headers.get('Content-Type', '').startswith('image/')
+                ):
+                    try:
+                        img_format = Image.open(BytesIO(response.content)).format.lower()
+                        post.image.save(
+                            f'img_{profile_obj.name}_{idx + 1}.{img_format}',
+                            ContentFile(response.content)
+                        )
+                    except UnidentifiedImageError:
+                        self.stdout.write(
+                            self.style.WARNING(' Invalid image response, SKIPPING...'),
+                            ending=''
+                        )
+    
+                else:
+                    self.stdout.write(
+                        self.style.WARNING(' Invalid image response, SKIPPING...'),
+                        ending=''
+                    )
+
             except requests.exceptions.Timeout:
                 self.stdout.write(
                     self.style.WARNING(' Request timed out for image, SKIPPING...'),
@@ -108,7 +159,7 @@ class Command(BaseCommand):
             count=options.get('count'), timeout=options.get('timeout')
         )
 
-        if post_count != 0:
+        if post_count != 0 or post_count != False:
             self.stdout.write(f'{post_count} POST OBJECTS HAVE BEEN CREATED SUCCESSFULLY.')
         else:
             self.stdout.write('NO POST OBJECT CREATED,')

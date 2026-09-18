@@ -22,10 +22,14 @@ class Command(BaseCommand):
         self.stdout.write('Running python manage.py createpost...')
 
         for _ in range(options.get('iteration')):
-            post_count += creator.handle_post_create(
+            posts_in_iteration = creator.handle_post_create(
                 options.get('count') or random.randint(1, 3),
                 timeout=options.get('timeout')
             )
+            if posts_in_iteration == False:
+                break
+
+            post_count += posts_in_iteration
 
         if post_count != 0:
             self.stdout.write(
