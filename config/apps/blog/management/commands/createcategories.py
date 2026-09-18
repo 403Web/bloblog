@@ -67,4 +67,3 @@ class Command(BaseCommand):
             self.stdout.write(
                 f'{cat_count} CATEGORY OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
             )
-        
