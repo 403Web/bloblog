@@ -7,7 +7,7 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ('-created_date',)
     readonly_fields = ('created_date', 'updated_date')
     list_display = ('author', 'id', 'created_date', 'updated_date')
-    search_fields = ('id', 'author', 'title', 'content')
+    search_fields = ('id', 'title', 'content')
 
 
 class PostLikeAdmin(admin.ModelAdmin):
