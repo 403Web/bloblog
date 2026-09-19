@@ -56,8 +56,8 @@
             </div>
             <div class="d-flex blogs flex-wrap">
                 {% for post in posts.latest %}
-                    <!--<a href="{% url 'blog:post_detail' pk=post.pk %}">-->
-                        <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
+                    <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
+                        <a href="{% url 'blog:post_detail' pk=post.pk %}">
                             <img src="{{ post.image.url }}" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
@@ -70,8 +70,8 @@
                                 <span class="small header-inf">{{ post.created_date | naturaltime }}</span>
                             </div>
                             </div>
-                        </div>
-                    <!--</a>-->
+                        </a>
+                    </div>
                 {% endfor %}
                 </div>
             <div class="d-flex justify-content-center align-items-center">

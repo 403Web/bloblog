@@ -152,6 +152,10 @@
     width: 30%;
 }
 
+.img-blog {
+    object-fit: contain;
+}
+
 @media (max-width: 1199.98px) {
     .blog{
         width: 45%!important;
