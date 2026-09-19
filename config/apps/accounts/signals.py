@@ -66,7 +66,7 @@ def delete_avatar_on_user_delete(sender, instance, **kwargs):
 
     if (
         avatar and
-        avatar.name != 'avatars/default.jpg' and
-        os.path.isfile(avatar.path)
+        os.path.isfile(avatar.path) and
+        avatar.name != 'avatars/default.jpg'
     ):
         avatar.delete(save=False)
