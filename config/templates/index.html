@@ -57,7 +57,7 @@
             <div class="d-flex blogs flex-wrap">
                 {% for post in posts.latest %}
                     <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
-                        <a href="{% url 'blog:post_detail' pk=post.pk %}">
+                        <a class="text-decoration-none" href="{% url 'blog:post_detail' pk=post.pk %}">
                             <img src="{{ post.image.url }}" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
