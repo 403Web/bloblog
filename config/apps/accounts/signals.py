@@ -19,7 +19,9 @@ def create_profile_on_user_create(sender, instance, created, **kwargs):
 
 
 @receiver(pre_delete, sender=User)
-def set_post_author_to_deleted_user_on_user_delete(sender, instance, **kwargs):
+def set_post_and_comment_author_to_deleted_user_on_user_delete(
+    sender, instance, **kwargs
+):
     if instance.email != settings.DELETED_USER_EMAIL:
         deleted_user, created = User.objects.get_or_create(email=settings.DELETED_USER_EMAIL)
 
