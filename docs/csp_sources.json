@@ -1,20 +1,15 @@
 {
     "font-src": [
-        {
-            "url": "https://example.com",
-            "description": "example"
-        }
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://cdn.jsdelivr.net"
     ],
     "style-src": [
-        {
-            "url": "https://example.com",
-            "description": "example"
-        }
+        "https://cdn.jsdelivr.net",
+        "https://cdn.ckeditor.com"
     ],
     "script-src": [
-        {
-            "url": "https://example.com",
-            "description": "example"
-        }
+        "https://cdn.jsdelivr.net",
+        "https://cdn.ckeditor.com"
     ]
 }
