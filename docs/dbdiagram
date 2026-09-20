@@ -44,6 +44,15 @@ Table Category {
   name varchar
 }
 
+Table View {
+  user int
+  post int
+
+  indexes {
+    (user, post) [unique]
+  }
+}
+
 Table Comment {
   id int [pk, increment]
   user int
@@ -76,6 +85,11 @@ Table CommentLike {
   }
 }
 
+Table Newsletter {
+  id int [pk, increment]
+  email email [unique]
+}
+
 Ref: "Profile"."user" - "User"."id"
 
 Ref: "Post"."author" > "Profile"."id"
@@ -99,3 +113,7 @@ Ref: "CommentLike"."comment" > "Comment"."id"
 Ref: "Follow"."following" > "Profile"."id"
 
 Ref: "Follow"."follower" > "Profile"."id"
+
+Ref: "View"."user" > "Profile"."id"
+
+Ref: "View"."post" > "Post"."id"

@@ -46,6 +46,26 @@ class PostLike(models.Model):
         return self.user.user.email
 
 
+class View(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='views'
+    )
+    post = models.ForeignKey(
+        'Post', on_delete=models.CASCADE, related_name='views'
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'post'], name='unique_user_post_view'
+            )
+        ]
+
+    def __str__(self):
+        return self.user.email
+
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
