@@ -3,3 +3,5 @@ djangorestframework==3.18.1
 python-decouple==3.8
 pillow==12.3.0
 django_filter==26.1
+faker==40.39.0
+requests==2.34.2

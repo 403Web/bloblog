@@ -32,7 +32,7 @@
                     <a href="{% url 'core:index' %}" class="nav-link  py-0 nav-buttons">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link  py-0 nav-buttons">Blog</a>
+                    <a href="{% url 'blog:post_list' %}" class="nav-link  py-0 nav-buttons">Blog</a>
                 </li>
                 <li class="nav-item">
                     <a href="" class="nav-link  py-0 nav-buttons">pages</a>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="d-flex align-items-center py-2">
                                 <span class="spinner-grow-sm spinner-grow text-success me-1"></span>
-                                <span class="small fw-semibold">{{ request.user.profile.first_name }}</span>
+                                <span class="small fw-semibold">{{ request.user.profile.name }}</span>
                             </div>
                             <ul class="list-unstyled w-100 flex-column px-3">
                                 <li class="">
@@ -89,7 +89,9 @@
                     </div>
                 </div>
             {% else %}
-                <button type="button" class="btn btn-primary p-1 col-1">Sign In<button>
+            <div class="col-1">
+                <button type="button" class="btn btn-primary p-1 w-75 d-none d-md-inline">Sign In<button>
+            </div>
             {% endif %}
             <div class="col-1 p-0">
                 <label class="custom-toggle">
@@ -150,7 +152,7 @@
                             <a href="" class="text-decoration-none text-dark-emphasis">About</a>
                         </li>
                         <li class=" mt-2">
-                            <a href="" class="text-decoration-none text-dark-emphasis">Blog</a>
+                            <a href="{% url 'blog:post_list' %}" class="text-decoration-none text-dark-emphasis">Blog</a>
                         </li>
                         <li class=" mt-2">
                             <a href="" class="text-decoration-none text-dark-emphasis">Archive</a>
@@ -291,7 +293,7 @@
                         </li>
                         <hr class="border border-dark w-75">
                         <li class="nav-item w-100">
-                            <a href="" class="nav-link">Blog</a>
+                            <a href="{% url 'blog:post_list' %}" class="nav-link">Blog</a>
                         </li>
                         <hr class="border border-dark w-75">
                         <li class="nav-item w-100">
@@ -300,6 +302,10 @@
                         <hr class="border border-dark w-75">
                         <li class="nav-item w-100">
                             <a href="" class="nav-link">Contact</a>
+                        </li>
+                        <hr class="border border-dark w-75">
+                        <li class="nav-item w-100">
+                            <a href="" class="nav-link">Sign In</a>
                         </li>
                     </ul>
                 </div>
