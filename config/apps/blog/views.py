@@ -1,4 +1,4 @@
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 from django.views.generic import ListView, DetailView
 from django.db.models import Count
 from django.urls import reverse_lazy
@@ -24,3 +24,7 @@ class PostListView(ListView):
 class PostRetrieveView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
+
+
+class PostCreateView(TemplateView):
+    template_name = 'blog/post_create.html'

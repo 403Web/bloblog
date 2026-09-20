@@ -2,8 +2,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% block head %}
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- links -->
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+
+    {% block links %}
+    {% endblock %}
+
+</head>
 
 <body class="work-sans" data-bs-theme="light">
     <!-- start nav  -->
@@ -238,7 +247,7 @@
     </footer>
 
 
-    <a href="" class="bg-primary text-decoration-none rounded-circle position-fixed p-2 d-flex justify-content-center align-items-center newpost-button">
+    <a href="{% url 'blog:post_create' %}" class="bg-primary text-decoration-none rounded-circle position-fixed p-2 d-flex justify-content-center align-items-center newpost-button">
         <i class="bi bi-pencil text-light fs-5"></i>
     </a>
 
@@ -311,7 +320,9 @@
                 </div>
             </div>
 
-    {% block script %}
+    <script src="{% static 'scripts/base.js' %}"></script>
+
+    {% block scripts %}
     {% endblock %}
 
 </body>
