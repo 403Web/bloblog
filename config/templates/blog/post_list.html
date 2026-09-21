@@ -27,9 +27,10 @@
                 <span class="fw-bold fs-4">Posts</span>
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sort
+                        Sort by
                     </button>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'blog:post_list' %}">Sort by</a></li>
                         <li><a class="dropdown-item" href="?sort=latest">Latest</a></li>
                         <li><a class="dropdown-item" href="?sort=popular">Popular</a></li>
                         <!--<li><a class="dropdown-item" href="#">Something else here</a></li>-->
