@@ -23,7 +23,7 @@ class Post(models.Model):
         return self.author.user.email
 
     def get_snippet(self):
-        return self.content[:20] if len(self.content) >= 20 else self.content
+        return self.content[:65] if len(self.content) >= 65 else self.content
 
 
 class PostLike(models.Model):
@@ -48,7 +48,7 @@ class PostLike(models.Model):
 
 class View(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='views'
+        'accounts.Profile', on_delete=models.CASCADE, related_name='views'
     )
     post = models.ForeignKey(
         'Post', on_delete=models.CASCADE, related_name='views'
