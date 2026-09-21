@@ -13,6 +13,7 @@ class RedirectToIndexView(RedirectView):
 
 class PostListView(ListView):
     context_object_name = 'posts'
+    paginate_by = 21
 
     def get_queryset(self):
         param = self.request.GET.get('sort', 'latest')
