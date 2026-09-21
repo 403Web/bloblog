@@ -1,9 +1,10 @@
-from django.views.generic.base import RedirectView, TemplateView
-from django.views.generic import ListView, DetailView
+from django.views.generic.base import RedirectView
+from django.views.generic import ListView, DetailView, CreateView
 from django.db.models import Count
 from django.urls import reverse_lazy
 
 from .models import Post
+from .forms import PostCreateForm
 
 
 class RedirectToIndexView(RedirectView):
@@ -26,5 +27,10 @@ class PostRetrieveView(DetailView):
     template_name = 'blog/post_detail.html'
 
 
-class PostCreateView(TemplateView):
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostCreateForm
     template_name = 'blog/post_create.html'
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
