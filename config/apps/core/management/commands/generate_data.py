@@ -26,8 +26,11 @@ class Command(BaseCommand):
                 options.get('count') or random.randint(1, 3),
                 timeout=options.get('timeout')
             )
-            if posts_in_iteration == False:
-                break
+            match posts_in_iteration:
+                case (False, 'NO_OBJECT'):
+                    break
+                case (False, 'INTEGRITY_ERROR'):
+                    continue
 
             post_count += posts_in_iteration
 

@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 from django.core.files.base import ContentFile
 from apps.accounts.models import Profile
 from apps.blog.models import Post, Category
-from faker import Faker
+from django.db import IntegrityError
 from django.contrib.auth import get_user_model
+from faker import Faker
 from PIL import Image, UnidentifiedImageError
 from io import BytesIO
 import requests
@@ -45,12 +46,18 @@ class Command(BaseCommand):
                     ' "python manage.py db_init" first.'
                 )
             )
-            return False
+            return (False, 'NO_OBJECT')
 
         self.stdout.write('Creating new user object...', ending='')
-        user_obj = get_user_model().objects.create_user(
-            email=self.fake.email(), password='a/@234a/?'
-        )
+        try:
+            user_obj = get_user_model().objects.create_user(
+                email=self.fake.email(), password='a/@234a/?'
+            )
+        except IntegrityError:
+            self.stdout.write(self.style.WARNING(
+                ' Unique constraint failed: accounts.User.email, SKIPPING'
+            ))
+            return (False, 'INTEGRITY_ERROR')
         self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
         self.stdout.write(f'email: {user_obj.email}')
 
@@ -159,7 +166,10 @@ class Command(BaseCommand):
             count=options.get('count'), timeout=options.get('timeout')
         )
 
-        if post_count != 0 or post_count != False:
-            self.stdout.write(f'{post_count} POST OBJECTS HAVE BEEN CREATED SUCCESSFULLY.')
-        else:
-            self.stdout.write('NO POST OBJECT CREATED,')
+        match post_count:
+            case (False, 'NO_OBJECT'):
+                self.stdout.write('NO POST OBJECT CREATED.')
+            case (False, 'INTEGRITY_ERROR'):
+                pass
+            case _:
+                self.stdout.write(f'{post_count} POST OBJECTS HAVE BEEN CREATED SUCCESSFULLY.')
