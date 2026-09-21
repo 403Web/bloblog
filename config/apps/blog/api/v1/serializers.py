@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.urls import reverse
 from apps.accounts.models import Profile
 
-from ...models import Post, Category
+from ...models import Post, PostLike, Category
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +51,21 @@ class PostSerializer(serializers.ModelSerializer):
         }
 
     def get_likes(self, obj):
-        return obj.likes.count()
+        request = self.context.get('request')
+
+        if request.user.is_authenticated:
+            liked_by_user = PostLike.objects.filter(
+                user=request.user.profile,
+                post=obj
+            ).exists()
+        else:
+            liked_by_user = None
+        likes_count = obj.likes.count()
+
+        return {
+            'count': likes_count,
+            'by_me': liked_by_user
+        }
 
     def to_representation(self, instance):
         request = self.context.get('request')
@@ -68,3 +82,7 @@ class PostSerializer(serializers.ModelSerializer):
             user=self.context.get('request').user
         )
         return super().create(validated_data)
+
+
+class ActionSerializer(serializers.Serializer):
+    pass
