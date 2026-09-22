@@ -63,7 +63,7 @@ class View(models.Model):
         ]
 
     def __str__(self):
-        return self.user.email
+        return self.user.user.email
 
 
 class Category(models.Model):
