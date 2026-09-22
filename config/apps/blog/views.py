@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.db.models import Q, Count
 from django.urls import reverse_lazy
 
-from .models import Post, Category
+from .models import Post, PostLike, Category
 from .forms import PostCreateForm
 
 
@@ -61,6 +61,17 @@ class PostListView(ListView):
 class PostRetrieveView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        post_liked_by_user = PostLike.objects.filter(
+            user=self.request.user.profile,
+            post=self.get_object()
+        ).exists()
+        context['liked_by_user'] = post_liked_by_user
+
+        return context
 
 
 class PostCreateView(CreateView):
