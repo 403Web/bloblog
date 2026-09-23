@@ -43,7 +43,7 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ('-created_date',)
     readonly_fields = ('created_date', 'updated_date')
     list_display = ('user', 'id', 'created_date', 'updated_date')
-    search_fields = ('id', 'user', 'name')
+    search_fields = ('id', 'user__email', 'name')
 
 
 class FollowAdmin(admin.ModelAdmin):

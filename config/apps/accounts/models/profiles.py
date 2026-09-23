@@ -35,4 +35,4 @@ class Follow(models.Model):
         ]
 
     def __str__(self):
-        return self.following.email
+        return self.following.user.email
