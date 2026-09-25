@@ -20,17 +20,41 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="{% url 'blog:post_create' %}">
-        {% csrf_token %}
-        <div class="container">
-            <div class="mt-3">
-                <div id="editor">
-                    <p></p>
+    <section>
+        <form method="post" action="{% url 'blog:post_create' %}" class="form-control" id="postForm">
+            {% csrf_token %}
+            <div class="container">
+                <div class="d-flex">
+                    <div class="me-5">
+                        <label for="ImageUpload" class="image-upload">
+                        <img src="" alt="Upload image">
+                        </label>
+                        <input type="file" accept="image" id="ImageUpload"class="d-none">
+                        </div>
+                    <div>
+                        <label for="">Title:</label>
+                        <input name="title" type="text" class="form-control">
+                        <label for="">Category:</label>
+                        <select name="category" class="form-select mt-1" aria-label="Default select example">
+                        <option selected>Select a Category</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary p-2 mt-2">Submit</button>
-        </div>
-    </form>
+            <div class="container">
+                <div class="mt-3">
+                    <div id="editor">
+                        <p></p>
+                    </div>
+                    <textarea name="content" id="content" hidden></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary p-2 mt-2">Submit</button>
+            </div>
+        </form>
+    </section>
 {% endblock %}
 
 {% block scripts %}

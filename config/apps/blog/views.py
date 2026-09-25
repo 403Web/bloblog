@@ -81,3 +81,12 @@ class PostCreateView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
