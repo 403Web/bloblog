@@ -1,0 +1,47 @@
+.work-sans{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.pfp-div{
+    width: 200px;
+}
+
+.pfp-edit{
+    width: 50px;
+    height: 50px;
+    top: 80%;
+    left: 80%;
+    cursor: pointer;
+}
+
+.username-edit{
+    left: 88%;
+}
+
+.blog{
+    width: 30%;
+}
+
+.img-blog {
+    object-fit: contain;
+}
+
+@media (max-width: 1199.98px) {
+    .blog{
+        width: 45%!important;
+    }
+}
+
+@media (max-width: 767.98px) { 
+    .blog{
+        width: 100%!important;
+    }
+}
