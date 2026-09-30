@@ -29,14 +29,13 @@ Accounts:
 - [ ] Reset Password (JWT)
 - [ ] Change account and profile info
 
-### Completion
+### Final Initializations
 - [ ] Add periodic tasks
 - [ ] Tests
 - [ ] GitHub actions (run tests on push)
-
-### Final Initializations
 - [ ] Add postgres service to docker-compose-stage.yml
 - [ ] DB config for PostgreSQL (settings.stage)
-- [ ] API load  test
+- [ ] Caching
+- [ ] API load test
 
 > the list will be changed
