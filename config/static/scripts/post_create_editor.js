@@ -31,9 +31,6 @@ ClassicEditor
             'undo', 'redo', '|',
             'bold', 'italic', '|',
             'fontSize',
-            'fontFamily',
-            'fontColor',
-            'fontBackgroundColor',
             '|',
             'uploadImage'
         ],

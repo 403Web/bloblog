@@ -45,13 +45,18 @@
                 </div>
             </div>
             <div>
-                <img src="{% static 'imgs/Image-header.png' %}" class="mt-4" width="100%" alt="">
+                <img src="{{ post.image.url }}" class="mt-4 rounded-2" width="100%" height="600px" alt="">
             </div>
         </div>
     </header>
 
     <!-- start content  -->
     <section>
+        <div class="my-cont">
+            <div class="serif work-sans">
+                {{ post.content | safe }}
+            </div>
+        </div>
         <div class="my-cont">
             <div class="text-secondary fs-5 serif">
                 <p class="my-4">Traveling is an enriching experience that opens up new horizons, exposes us to different cultures, and creates memories that last a lifetime. However, traveling can also be stressful and overwhelming, especially if you don't plan and prepare adequately. In this blog article, we'll explore tips and tricks for a memorable journey and how to make the most of your travels.</p>
