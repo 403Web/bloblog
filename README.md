@@ -2,7 +2,7 @@
 
 
 ## TODO
-- [ ] Add PostView.get_or_create to PostRetrieveView
+- [x] Add PostView.get_or_create to PostRetrieveView
 - [ ] Add PostLike to blog app (views)
 - [ ] Commenting system (comment app)
 

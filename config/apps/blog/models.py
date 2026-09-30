@@ -49,7 +49,7 @@ class PostLike(models.Model):
         return self.user.user.email
 
 
-class View(models.Model):
+class PostView(models.Model):
     user = models.ForeignKey(
         'accounts.Profile', on_delete=models.CASCADE, related_name='views'
     )

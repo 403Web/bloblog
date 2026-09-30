@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, PostLike, View, Category
+from .models import Post, PostLike, PostView, Category
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -17,7 +17,7 @@ class PostLikeAdmin(admin.ModelAdmin):
     search_fields = ('id',)
 
 
-class ViewAdmin(admin.ModelAdmin):
+class PostViewAdmin(admin.ModelAdmin):
     ordering = ('-created_date',)
     readonly_fields = ('created_date',)
     list_display = ('user', 'id', 'post', 'created_date')
@@ -31,5 +31,5 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(PostLike, PostLikeAdmin)
-admin.site.register(View, ViewAdmin)
+admin.site.register(PostView, PostViewAdmin)
 admin.site.register(Category, CategoryAdmin)
