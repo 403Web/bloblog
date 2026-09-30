@@ -1,6 +1,7 @@
 from django.views.generic.base import RedirectView
 from django.views.generic import ListView, DetailView, CreateView
 from django.db.models import Q, Count
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 from .models import Post, PostView, PostLike, Category
@@ -80,6 +81,14 @@ class PostRetrieveView(DetailView):
             PostView.objects.get_or_create(user=request.user.profile, post=post)
 
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+
+        PostLike.objects.get_or_create(
+            user=request.user.profile, post=post
+        )
+        return redirect(reverse_lazy('blog:post_detail', kwargs={'pk': post.pk}))
 
 
 class PostCreateView(CreateView):
