@@ -25,6 +25,9 @@ class Post(models.Model):
     def get_snippet(self):
         return self.content[:65] if len(self.content) >= 65 else self.content
 
+    def get_title_snippet(self):
+        return str(self.title[:25] + '...') if len(self.title) >= 25 else self.title
+
 
 class PostLike(models.Model):
     user = models.ForeignKey(

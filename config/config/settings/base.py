@@ -152,3 +152,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+# uploads
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024 # 10MiB

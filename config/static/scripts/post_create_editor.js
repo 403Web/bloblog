@@ -35,6 +35,13 @@ ClassicEditor
             'uploadImage'
         ],
 
+        fontSize: {
+            options: [
+                'default',
+                'big'
+            ]
+        },
+
         root: {
             placeholder: 'Type here...'
         }
