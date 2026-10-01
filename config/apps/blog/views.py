@@ -85,9 +85,16 @@ class PostRetrieveView(DetailView):
     def post(self, request, *args, **kwargs):
         post = self.get_object()
 
-        PostLike.objects.get_or_create(
-            user=request.user.profile, post=post
-        )
+        data = {
+            'user': request.user.profile,
+            'post': post
+        }
+        try:
+            like_obj = PostLike.objects.get(**data)
+        except PostLike.DoesNotExist:
+            like_obj = None
+        like_obj.delete() if like_obj else PostLike.objects.create(**data)
+
         return redirect(reverse_lazy('blog:post_detail', kwargs={'pk': post.pk}))
 
 
