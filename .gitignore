@@ -64,6 +64,8 @@ config/media/posts/*
 !config/media/posts/default.jpg
 config/media/avatars/*
 !config/media/avatars/default.jpg
+config/staticfiles/*
+!config/staticfiles/.gitkeep
 
 # Flask stuff:
 instance/
