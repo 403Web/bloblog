@@ -44,3 +44,15 @@
 .reply-btn:active{
     color: #0d6efd!important;
 }
+
+
+
+
+.delete-alert{
+    font-size: 18px;
+    top: 85%;
+    left: 50%;
+    height: 60px;
+    width: 400px;
+}
+
