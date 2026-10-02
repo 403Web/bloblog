@@ -52,7 +52,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="badge my-2 text-primary"><span>Technology</span></div>
-                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">
                                 <i class="bi bi-trash3 text-danger"></i>
                             </button>
                         </div>
@@ -71,7 +71,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="badge my-2 text-primary"><span>Technology</span></div>
-                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">
                                 <i class="bi bi-trash3 text-danger"></i>
                             </button>
                         </div>
@@ -90,7 +90,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="badge my-2 text-primary"><span>Technology</span></div>
-                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">
                                 <i class="bi bi-trash3 text-danger"></i>
                             </button>
                         </div>
@@ -109,7 +109,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="badge my-2 text-primary"><span>Technology</span></div>
-                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">
                                 <i class="bi bi-trash3 text-danger"></i>
                             </button>
                         </div>
@@ -127,11 +127,11 @@
         </div>
     </section>
     <!-- Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fs-5" id="deleteModalLabel">Delete Post</h5>
+                <h5 class="modal-title fs-5" id="deleteCommentModalLabel">Delete Post</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -144,10 +144,10 @@
             </div>
         </div>
     </div>
-    <div id="liveAlertPlaceholder" class="delete-alert position-fixed translate-middle-x"></div>
+    <div id="ID" class="delete-alert position-fixed translate-middle-x"></div>
     
 <script>
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    const alertPlaceholder = document.getElementById('ID')
     const appendAlert = (message, type) => {
     const wrapper = document.createElement('div')
     wrapper.innerHTML = [

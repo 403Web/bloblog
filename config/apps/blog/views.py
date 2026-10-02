@@ -1,11 +1,12 @@
 from django.views.generic.base import RedirectView
-from django.views.generic import ListView, DetailView, CreateView
-from django.db.models import Q, Count
+from django.views.generic import ListView, DetailView, CreateView, DeleteView
+from django.db.models import Q, Count, Exists, OuterRef
+from apps.comment.models import CommentLike
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 from .models import Post, PostView, PostLike, Category
-from .forms import PostCreateForm
+from .forms import PostForm
 
 
 class RedirectToIndexView(RedirectView):
@@ -66,11 +67,40 @@ class PostRetrieveView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # POST LIKE
         post_liked_by_user = PostLike.objects.filter(
             user=self.request.user.profile,
             post=self.get_object()
         ).exists()
-        context['liked_by_user'] = post_liked_by_user
+
+        # COMMENT ORDERING
+        SORTS = {
+            'recent': '-created_date',
+            'popular': '-likes_count'
+        }
+        sort = self.request.GET.get('sort', 'recent')
+        sort = sort if sort in SORTS.keys() else 'recent'
+
+        comments = self.get_object().comments.filter(parent__isnull=True)
+
+        match sort:
+            case 'recent':
+                comments = comments.order_by(SORTS.get(sort))
+            case _:
+                comments = comments.annotate(likes_count=Count('likes')).order_by(SORTS.get(sort))
+
+        # COMMENT LIKE
+        comments = comments.annotate(
+            liked_by_user=Exists(CommentLike.objects.filter(
+                user=self.request.user.profile,
+                comment=OuterRef('pk')
+            ))
+        )
+
+        context.update({
+            'liked_by_user': post_liked_by_user,
+            'comments': comments,
+        })
 
         return context
 
@@ -89,10 +119,7 @@ class PostRetrieveView(DetailView):
             'user': request.user.profile,
             'post': post
         }
-        try:
-            like_obj = PostLike.objects.get(**data)
-        except PostLike.DoesNotExist:
-            like_obj = None
+        like_obj = PostLike.objects.filter(**data).first()
         like_obj.delete() if like_obj else PostLike.objects.create(**data)
 
         return redirect(reverse_lazy('blog:post_detail', kwargs={'pk': post.pk}))
@@ -100,7 +127,7 @@ class PostRetrieveView(DetailView):
 
 class PostCreateView(CreateView):
     model = Post
-    form_class = PostCreateForm
+    form_class = PostForm
     template_name = 'blog/post_create.html'
 
     def get_success_url(self):
@@ -114,3 +141,16 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
+
+
+class PostDeleteView(DeleteView):
+    model = Post
+
+    def get_queryset(self):
+        return Post.objects.filter(
+            pk=self.kwargs.get('pk'),
+            author=self.request.user.profile
+        )
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_list')

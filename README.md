@@ -4,7 +4,9 @@
 ## TODO
 - [x] Add PostView.get_or_create to PostRetrieveView
 - [x] Add PostLike to blog app (views)
-- [ ] Commenting system (comment app)
+- [x] Commenting system (comment app)
+- [ ] Post edit (remains from blog)
+- [ ] Comment edit (remains from commenting system)
 
 ### Accounts and Authentication
 - [ ] Add smtp4dev service to docker compose

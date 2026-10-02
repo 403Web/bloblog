@@ -4,7 +4,7 @@ from .models import Comment, CommentLike
 
 
 class CommentAdmin(admin.ModelAdmin):
-    ordering = ('created_date',)
+    ordering = ('-created_date',)
     readonly_fields = ('created_date', 'updated_date')
     list_display = ('user', 'id', 'post', 'created_date', 'updated_date')
     search_fields = ('id', 'content')
