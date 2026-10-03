@@ -7,8 +7,8 @@
 - [x] Commenting system (comment app)
 
 ### Accounts and Authentication
-- [ ] Add smtp4dev service to docker compose
-- [ ] SMTP config (settings.dev)
+- [x] Add smtp4dev service to docker compose
+- [x] SMTP config (settings.dev)
 - [ ] Register, signin
 - [ ] Change password
 - [ ] Reset Password

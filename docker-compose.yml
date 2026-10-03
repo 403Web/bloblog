@@ -10,3 +10,20 @@ services:
     env_file:
       - ./envs/.env
     command: python manage.py runserver 0.0.0.0:8000
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - '5000:80'
+      - '25:25'
+      - '143:143'
+      - '110:110'
+    volumes:
+        - smtp4dev-data:/smtp4dev
+    environment:
+      - ServerOptions__Urls=http://*:80
+      - ServerOptions__HostName=smtp4dev
+
+volumes:
+  smtp4dev-data:
