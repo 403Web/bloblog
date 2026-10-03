@@ -1,5 +1,11 @@
 from django.views.generic.base import RedirectView
-from django.views.generic import ListView, DetailView, CreateView, DeleteView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 from django.db.models import Q, Count, Exists, OuterRef
 from apps.comment.models import CommentLike
 from django.shortcuts import redirect
@@ -128,10 +134,7 @@ class PostRetrieveView(DetailView):
 class PostCreateView(CreateView):
     model = Post
     form_class = PostForm
-    template_name = 'blog/post_create.html'
-
-    def get_success_url(self):
-        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
+    template_name = 'blog/post_save.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -141,6 +144,23 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_save.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
 
 class PostDeleteView(DeleteView):
