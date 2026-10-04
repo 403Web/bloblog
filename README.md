@@ -9,7 +9,7 @@
 ### Accounts and Authentication
 - [x] Add smtp4dev service to docker compose
 - [x] SMTP config (settings.dev)
-- [ ] Register, signin
+- [x] Register, signin, signout
 - [ ] Change password
 - [ ] Reset Password
 - [ ] Change account and profile info

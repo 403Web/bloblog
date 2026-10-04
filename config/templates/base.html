@@ -48,7 +48,7 @@
                     <a href="" class="nav-link  py-0 nav-buttons">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#footer" class="nav-link  py-0 nav-buttons">Profile</a>
+                    <a href="#footer" class="nav-link  py-0 nav-buttons">Contact</a>
                 </li>
             </ul>
             <div class="col-6 col-md-2">
@@ -111,7 +111,7 @@
                 </div>
             {% else %}
             <div class="col-1">
-                <button type="button" class="btn btn-primary p-1 w-75 d-none d-md-inline">Sign In<button>
+                <a href="{% url 'accounts:signin' %}" class="btn btn-primary p-2 w-75 d-none d-md-inline d-inline-block">Sign In</a>
             </div>
             {% endif %}
             <div class="col-1 p-0">
@@ -259,13 +259,11 @@
         </div>
     </footer>
 
-
+    {% if request.user.is_authenticated %}
     <a href="{% url 'blog:post_create' %}" class="bg-primary text-decoration-none rounded-circle position-fixed p-2 d-flex justify-content-center align-items-center newpost-button">
         <i class="bi bi-pencil text-light fs-5"></i>
     </a>
-
-
-
+    {% endif %}
 
     <div class="modal fade" id="logoutmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -275,11 +273,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to log out?
+                    Are you sure you want to sign out?
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-success" id="liveAlertBtn" data-bs-dismiss="modal">Yes</button>
+                    <form method="post" action="{% url 'accounts:signout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success" id="liveAlertBtn" data-bs-dismiss="modal">Yes</button>
+                    </form>
                 </div>
             </div>
         </div>

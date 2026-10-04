@@ -12,15 +12,15 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = ('date_joined', 'updated_date', 'last_login')
     ordering = ('-date_joined',)
     list_display = (
-        'email', 'id', 'is_superuser', 'is_active', 'date_joined', 'updated_date'
+        'email', 'id', 'is_superuser', 'is_verified', 'date_joined', 'updated_date'
     )
-    list_filter = ('is_superuser', 'is_staff', 'is_active')
+    list_filter = ('is_superuser', 'is_staff', 'is_active', 'is_verified')
     search_fields = ('id', 'email')
 
     fieldsets = (
         ('AUTHENTICATION', {'fields': ('email', 'password')}),
         ('STATUS', {
-            'fields': ('is_superuser', 'is_staff', 'is_active')
+            'fields': ('is_superuser', 'is_staff', 'is_active', 'is_verified')
         }),
         ('PERMISSION & GROUPS', {'fields': ('user_permissions', 'groups')}),
         ('IMPORTANT DATES', {'fields': ('date_joined', 'updated_date', 'last_login')})
@@ -32,7 +32,7 @@ class UserAdmin(BaseUserAdmin):
                 'classes': ('wide',),
                 'fields': (
                     'email', 'password1', 'password2',
-                    'is_superuser', 'is_staff', 'is_active'
+                    'is_superuser', 'is_staff', 'is_active', 'is_verified'
                 )
             },
         ),

@@ -1,14 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlobLOg | Sign In</title>
+    <title>Bloblog | Sign Up</title>
     <!-- links -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'styles/auth/signup.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +18,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
-<body data-bs-theme="" class="work-sans d-flex justify-content-center align-items-center">
+<body>
+    <body data-bs-theme="" class="work-sans d-flex justify-content-center align-items-center">
     <section class="d-flex signin-box">
         <div class="border border-1 container shadow-sm w-100 border-secondary-subtle">
             <div class="position-relative my-4">
@@ -40,21 +42,38 @@
                 <a href="" class="text-decoration-none text-dark-emphasis"><i class="bi bi-arrow-right-short fs-3 position-absolute back-icon translate-middle top-50 p-0"></i></a> 
             </div>
             <div>
-                <form action="">
-                    <span class="fs-5 fw-bold my-2 d-block">Sign In</span>
+                <form method="post" action="{% url 'accounts:signup' %}">
+                    {% csrf_token %}
+                    <span class="fs-5 fw-bold my-2 d-block">Sign Up</span>
                     <span class="text-secondary-emphasis ms-2">Enter Your Email</span>
                     <div class="form-floating">
-                        <input type="email" class="form-control my-2" id="floatingemail" placeholder="Password">
+                        <input name="email" type="email" class="form-control my-2" id="floatingemail" placeholder="Password" value="{{ form.data.email | default:'' }}">
                         <label for="floatingemail">Email</label>
                     </div>
-                    <span class="text-secondary-emphasis ms-2 mt-2">Enter Your Password</span>
+                    {% if form.errors.email %}
+                        {{ form.errors.email }}
+                    {% endif %}
+                    <span class="text-secondary-emphasis ms-2 mt-2">Choose a Password</span>
                     <div class="form-floating">
-                        <input type="password" class="form-control my-2" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword">Your Password</label>
+                        <input name="password1" type="password" class="form-control my-2" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Choose Your Password</label>
                     </div>
-                    <a href="" class="text-decoration-none">Forgot Your Password?</a>
+                    {% if form.errors.password1 %}
+                        {{ form.errors.password1 }}
+                    {% endif %}
+                    <span class="text-secondary-emphasis ms-2 mt-2">Confirm Your Password</span>
+                    <div class="form-floating">
+                        <input name="password2" type="password" class="form-control my-2" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Confirm Your Password</label>
+                    </div>
+                    {% if form.errors.password2 %}
+                        {{ form.errors.password2 }}
+                    {% endif %}
+                    {% if form.non_field_errors %}
+                        {{ form.non_field_errors }}
+                    {% endif %}
                     <button type="submit" class="btn btn-primary w-100 my-3">Submit</button>
-                    <span class="text-secondary mb-2 d-block">Don't Have An Account? <a href="" class="text-decoration-none">Sign up</a></span>
+                    <span class="text-secondary mb-2 d-block">Already Have An Account? <a href="{% url 'accounts:signin' %}" class="text-decoration-none">Sign In</a></span>
                     <span class="d-block mb-2">Signing Up in means that you agree to our 
                         <a href="" class="text-decoration-none">privacy policy</a>
                     </span>
@@ -62,5 +81,6 @@
             </div>
         </div>
     </section>
+</body>
 </body>
 </html>

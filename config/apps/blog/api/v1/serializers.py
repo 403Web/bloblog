@@ -5,6 +5,7 @@ from apps.accounts.models import Profile
 from ...models import Post, PostLike, Category
 
 class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Category
         fields = ['id', 'name']
