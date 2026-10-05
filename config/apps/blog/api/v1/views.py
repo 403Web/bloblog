@@ -9,7 +9,7 @@ from rest_framework import status
 from .serializers import PostSerializer, CategorySerializer, ActionSerializer
 from .permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
 from .paginations import PostPagination
-from ...models import Post, PostLike, Category
+from ...models import Post, PostView, PostLike, Category
 
 
 class PostViewSet(ModelViewSet):
@@ -23,6 +23,15 @@ class PostViewSet(ModelViewSet):
     filterset_fields = ['category', 'category__name']
     search_fields = ['title', 'content']
     ordering_fields = ['created_date', 'likes']
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            PostView.objects.get_or_create(
+                user=request.user.profile,
+                post=self.get_object()
+            )
+
+        return super().retrieve(request, *args, **kwargs)
 
     @action(
         methods=['POST'],
