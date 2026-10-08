@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.urls import reverse
 from apps.accounts.models import Profile
 
-from ...models import Post, PostLike, Category
+from ...models import Post, PostView, PostLike, Category
 
 class CategorySerializer(serializers.ModelSerializer):
 
@@ -13,8 +13,14 @@ class CategorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     snippet = serializers.CharField(source='get_snippet', read_only=True)
-    category = CategorySerializer()
+    category = CategorySerializer(read_only=True)
+    category_pk = serializers.PrimaryKeyRelatedField(
+        source='category',
+        queryset=Category.objects.all(),
+        write_only=True
+    )
     likes = serializers.SerializerMethodField()
+    views = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -27,7 +33,9 @@ class PostSerializer(serializers.ModelSerializer):
             'content',
             'snippet',
             'category',
+            'category_pk',
             'likes',
+            'views',
             'created_date',
             'updated_date'
         ]
@@ -36,11 +44,13 @@ class PostSerializer(serializers.ModelSerializer):
             'url',
             'author',
             'snippet',
+            'category',
             'likes',
+            'views',
             'created_date',
             'updated_date'
         ]
-        write_only_fields = ['content']
+        write_only_fields = ['content', 'category_pk']
 
     def get_url(self, obj):
         request = self.context.get('request')
@@ -54,18 +64,37 @@ class PostSerializer(serializers.ModelSerializer):
     def get_likes(self, obj):
         request = self.context.get('request')
 
-        if request.user.is_authenticated:
-            liked_by_user = PostLike.objects.filter(
+        liked_by_user = (
+            PostLike.objects.filter(
                 user=request.user.profile,
                 post=obj
             ).exists()
-        else:
-            liked_by_user = None
+            if request.user.is_authenticated
+            else None
+        )
         likes_count = obj.likes.count()
 
         return {
             'count': likes_count,
-            'by_me': liked_by_user
+            'by_user': liked_by_user
+        }
+
+    def get_views(self, obj):
+        request = self.context.get('request')
+
+        viewed_by_user = (
+            PostView.objects.filter(
+                user=request.user.profile,
+                post=obj
+            ).exists()
+            if request.user.is_authenticated
+            else None
+        )
+        views_count = obj.views.count()
+
+        return {
+            'count': views_count,
+            'by_user': viewed_by_user
         }
 
     def to_representation(self, instance):

@@ -19,7 +19,7 @@
 
 ### API
 Blog:
-- [ ] Add PostView.get_or_create to PostViewSet.retrieve
+- [x] Add PostView.get_or_create to PostViewSet.retrieve
 - [ ] Add commenting system to PostViewSet (actions)
 
 Comment:
