@@ -2,7 +2,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 
-class PostPaginator(PageNumberPagination):
+class CommentPaginator(PageNumberPagination):
     page_size = 20
     page_query_param = 'page'
     max_page_size = 100
@@ -18,7 +18,7 @@ class PostPaginator(PageNumberPagination):
                     'current_page': self.page.number,
                     'total_pages': self.page.paginator.num_pages
                 },
-                'total_posts': self.page.paginator.count,
+                'total_comments': self.page.paginator.count,
                 'results': data
             }
         )

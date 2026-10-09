@@ -20,13 +20,14 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('accounts/', include('apps.accounts.urls')),
     path('', include('apps.core.urls')),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('apps.accounts.urls')),
     path('blog/', include('apps.blog.urls')),
-    path('blog/posts/', include('apps.comment.urls')),
-    path('api/v1/blog/', include('apps.blog.api.v1.urls'))
+    path('comments/posts/', include('apps.comment.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/v1/blog/', include('apps.blog.api.v1.urls')),
+    path('api/v1/comment/', include('apps.comment.api.v1.urls'))
 ]
 
 # serving media in dev

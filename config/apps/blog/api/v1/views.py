@@ -8,7 +8,7 @@ from rest_framework import status
 
 from .serializers import PostSerializer, CategorySerializer, ActionSerializer
 from .permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
-from .paginations import PostPagination
+from .paginations import PostPaginator
 from ...models import Post, PostView, PostLike, Category
 
 
@@ -19,7 +19,7 @@ class PostViewSet(ModelViewSet):
     filter_backends = [
         DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter
     ]
-    pagination_class = PostPagination
+    pagination_class = PostPaginator
     filterset_fields = ['category', 'category__name']
     search_fields = ['title', 'content']
     ordering_fields = ['created_date', 'likes']

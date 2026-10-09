@@ -6,3 +6,4 @@ django_filter==26.1
 faker==40.39.0
 requests==2.34.2
 django-cte==4.0.0
+drf-nested-routers==0.95.3
