@@ -51,7 +51,9 @@
                         <label for="floatingemail">Email</label>
                     </div>
                     {% if form.errors.email %}
-                        {{ form.errors.email }}
+                        <div>
+                            <span class="field-error">{{ form.errors.email }}</span>
+                        </div>
                     {% endif %}
                     <span class="text-secondary-emphasis ms-2 mt-2">Choose a Password</span>
                     <div class="form-floating">
@@ -59,7 +61,9 @@
                         <label for="floatingPassword">Choose Your Password</label>
                     </div>
                     {% if form.errors.password1 %}
-                        {{ form.errors.password1 }}
+                        <div>
+                            <span class="field-error">{{ form.errors.password1 }}</span>
+                        </div>
                     {% endif %}
                     <span class="text-secondary-emphasis ms-2 mt-2">Confirm Your Password</span>
                     <div class="form-floating">
@@ -67,10 +71,14 @@
                         <label for="floatingPassword">Confirm Your Password</label>
                     </div>
                     {% if form.errors.password2 %}
-                        {{ form.errors.password2 }}
+                        <div>
+                            <span class="field-error">{{ form.errors.password2 }}</span>
+                        </div>
                     {% endif %}
                     {% if form.non_field_errors %}
-                        {{ form.non_field_errors }}
+                        <div>
+                            <span class="field-error">{{ form.non_field_errors }}</span>
+                        </div>
                     {% endif %}
                     <button type="submit" class="btn btn-primary w-100 my-3">Submit</button>
                     <span class="text-secondary mb-2 d-block">Already Have An Account? <a href="{% url 'accounts:signin' %}" class="text-decoration-none">Sign In</a></span>

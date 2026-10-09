@@ -102,7 +102,7 @@
                                 <button type="button" class="d-inline btn delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=comment.pk %}">
                                     <i class="bi bi-trash3 text-danger"></i>
                                 </button>
-                                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ comment.id }}" data-comment-text="{{ comment.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
                             {% endif %}
                         </div>
                     </div>
@@ -139,16 +139,22 @@
                         {% get_all_replies comment as replies %}
                         {% for reply in replies %}
                             <div class="reply ms-4 w-75 mt-2">
-                                <div>
-                                <img src="{{ reply.user.avatar.url }}" width="30px" class="rounded-circle me-2" alt="">
-                                <span class="fw-semibold me-1 small">{{ reply.user.name }}</span>
-                                <span class="small text-secondary">{{ reply.created_date | naturaltime }}</span>
+                                <div class="d-flex Justify-content-between flex-no-wrap">
+                                    <div class="d-flex Justify-content-between flex-no-wrap">
+                                        <div>
+                                            <img src="{{ reply.user.avatar.url }}" width="30px" class="rounded-circle me-2" alt="">
+                                            <span class="fw-semibold me-1 small">{{ reply.user.name }}</span>
+                                            <span class="small text-secondary">{{ reply.created_date | naturaltime }}</span>
+                                        </div>
+                                        {% if reply.user == request.user.profile %}
+                                            <button type="button" class="d-inline btn me-5 delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=reply.pk %}">
+                                                <i class="bi bi-trash3 text-danger"></i>
+                                            </button>
+                                            <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ reply.id }}" data-comment-text="{{ reply.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                            {% if reply.user == request.user.profile %}
-                            <button type="button" class="btn me-5 delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=reply.pk %}">
-                                <i class="bi bi-trash3 text-danger"></i>
-                            </button>
-                            {% endif %}
                             <div class="my-3 text-dark-subtle">
                                 <p>{{ reply.content }}</p>
                             </div>
@@ -234,11 +240,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <form action=""> 
+        <form id="edit-comment-form" method="post"> 
+            {% csrf_token %}
             <label for="" class="fs-5 my-2">Edit your comment</label>
             <div class="d-flex">
-                <input type="text" class="form-control w-75">
-                <button class="btn btn-primary" style="width: 10%;">Edit</button>
+                <input id="edit-comment-input" name="content" type="text" class="form-control w-75" required>
+                <button type="submit" class="btn btn-primary" style="width: 10%;">Edit</button>
             </div>
         </form>
     </div>
