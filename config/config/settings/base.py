@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django_filters',
+    'mail_templated',
     'rest_framework',
     'apps.accounts',
     'apps.core',

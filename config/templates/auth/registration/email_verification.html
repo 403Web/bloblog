@@ -1,14 +1,20 @@
+{% extends 'mail_templated/base.tpl' %}
+
+{% block subject %}
+Verify Your Email address for BlobLog account
+{% endblock %}
+
+{% block html %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlobLOg | Sign Up</title>
+    <title>BlobLog | Email Verification</title>
     <!-- links -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,38 +24,38 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
         .work-sans{
-    font-family: "Work Sans", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
-body{
-    height: 100vh;
-}
-
-*{
-    margin: 0;
-    padding: 0;
-}
-
-.back-icon{
-    left: 95%;
-}
-
-.signin-box{
-    width: 30%;
-}
-
-@media (max-width: 991.98px) { 
-    .signin-box{
-        width: 50%;
-    }
-    @media (max-width: 575.98px) { 
-        .signin-box{
-            width: 80%;
+            font-family: "Work Sans", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
-    }
-}
+
+        body{
+            height: 100vh;
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        .back-icon{
+            left: 95%;
+        }
+
+        .signin-box{
+            width: 30%;
+        }
+
+        @media (max-width: 991.98px) { 
+            .signin-box{
+                width: 50%;
+            }
+            @media (max-width: 575.98px) { 
+                .signin-box{
+                    width: 80%;
+                }
+            }
+        }
     </style>
 </head>
 <body data-bs-theme="">
@@ -77,14 +83,29 @@ body{
             <div>
                 <form action="">
                     <span class="fs-5 fw-bold my-2 d-block">Verify Email</span>
-                    <span class="my-3 ms-2 d-block">Hi MotebaheriFan121,</span>
+                    <span class="my-3 ms-2 d-block">Hi {{ user.profile.name }},</span>
                     <p class="text-secondary-emphasis ms-2 my-2">Thanks for signing up for BlobLog!</p>
                     <p class="text-secondary-emphasis ms-2 my-3">Please verify your email address by clicking the button below:</p>
-                    <a href="" class="btn btn-primary p-2 w-100 d-block">
-                        Reset Password
+                    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:email_verification' uidb64=uidb64 token=token %}" class="btn btn-primary p-2 w-100 d-block">
+                        Verify Email
                     </a>
                     <p class="text-secondary-emphasis ms-2 my-3">If you didn't create an account on BlobLog, you can safely ignore this email.</p>
                     <span class="text-secondary-emphasis ms-2 d-block">Thanks</span>
                     <span class="text-secondary-emphasis ms-2 mb-3 d-block">BlobLog team</span>
                 </form>
             </div>
+{% endblock %}
+
+{% block text %}
+Hi {{ user.profile.name }},
+
+Thanks for signing up for BlobLog!
+
+Please verify your email address by following the link below:
+{{ protocol }}://{{ domain }}{% url 'accounts:email_verification' uidb64=uidb64 token=token %}
+
+If you didn't create an account on BlobLog, you can safely ignore this email.
+
+Thanks
+BlobLog team
+{% endblock %}
