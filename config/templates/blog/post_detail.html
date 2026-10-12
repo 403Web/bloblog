@@ -147,7 +147,7 @@
                                             <span class="small text-secondary">{{ reply.created_date | naturaltime }}</span>
                                         </div>
                                         {% if reply.user == request.user.profile %}
-                                            <button type="button" class="d-inline btn me-5 delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=reply.pk %}">
+                                            <button type="button" class="d-inline btn me-1 delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=reply.pk %}">
                                                 <i class="bi bi-trash3 text-danger"></i>
                                             </button>
                                             <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ reply.id }}" data-comment-text="{{ reply.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
@@ -155,10 +155,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="my-3 text-dark-subtle">
+                            <div class="my-3 ms-4 text-dark-subtle">
                                 <p>{{ reply.content }}</p>
                             </div>
-                            <div>
+                            <div class="ms-3">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
                                         <form method="post" action="{% url 'comment:comment_like' post_pk=post.pk comment_pk=reply.pk %}">
@@ -183,7 +183,6 @@
                                         <button type="submit" class="input-group-text" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ reply.pk }}"><i class="bi bi-send"></i></button>
                                     </div>
                                 </form>
-                            </div>
                             </div>
                         {% endfor %}
                     {% endif %}
