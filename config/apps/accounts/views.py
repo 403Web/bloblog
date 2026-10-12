@@ -1,6 +1,10 @@
 from django.views.generic.base import View
 from django.views.generic import CreateView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import (
+    LoginView,
+    LogoutView,
+    PasswordChangeView as DefaultPasswordChangeView
+)
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
@@ -119,3 +123,12 @@ class SignOutView(LogoutView):
 
     def get_success_url(self):
         return reverse_lazy('core:index')
+
+
+class PasswordChangeView(DefaultPasswordChangeView):
+    template_name = 'auth/passwords/change_password.html'
+    success_url = reverse_lazy('core:index')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response # TODO: messages

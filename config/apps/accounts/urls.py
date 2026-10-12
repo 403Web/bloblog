@@ -5,7 +5,8 @@ from .views import (
     EmailVerificationView,
     ResendVerificationView,
     SignInView,
-    SignOutView
+    SignOutView,
+    PasswordChangeView
 )
 
 
@@ -17,5 +18,6 @@ urlpatterns = [
     path('verification/resend/', ResendVerificationView.as_view(), name='resend_verification'),
     path('verification/<uidb64>/<token>/', EmailVerificationView.as_view(), name='email_verification'),
     path('signin/', SignInView.as_view(), name='signin'),
-    path('signout/', SignOutView.as_view(), name='signout')
+    path('signout/', SignOutView.as_view(), name='signout'),
+    path('change-password/', PasswordChangeView.as_view(), name='change_password')
 ]

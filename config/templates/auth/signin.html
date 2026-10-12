@@ -51,7 +51,7 @@
                     <span class="fs-5 fw-bold my-2 d-block">Sign In</span>
                     <span class="text-secondary-emphasis ms-2">Enter Your Email</span>
                     <div class="form-floating">
-                        <input name="username" type="email" class="form-control my-2" id="floatingemail" placeholder="Password">
+                        <input name="username" type="email" class="form-control my-2" id="floatingemail" placeholder="Password" value="{{ form.data.email | default:'' }}">
                         <label for="floatingemail">Email</label>
                     </div>
                     <span class="text-secondary-emphasis ms-2 mt-2">Enter Your Password</span>
