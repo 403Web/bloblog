@@ -13,7 +13,7 @@
 - [x] Register, signin, signout
 - [x] Change password
 - [x] Reset Password
-- [ ] Change account and profile info
+- [x] Change account and profile info
 
 ### Messages
 - [ ] Messages

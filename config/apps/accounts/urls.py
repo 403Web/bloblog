@@ -10,7 +10,8 @@ from .views import (
     PasswordChangeView,
     PasswordResetView,
     PasswordResetConfirmView,
-    ResendPasswordResetView
+    ResendPasswordResetView,
+    SettingsView
 )
 
 
@@ -39,5 +40,7 @@ urlpatterns = [
         PasswordResetConfirmView.as_view(),
         name='reset_password_confirm'
     ),
-    path('reset-password/resend/', ResendPasswordResetView.as_view(), name='resend_reset_password')
+    path('reset-password/resend/', ResendPasswordResetView.as_view(), name='resend_reset_password'),
+
+    path('settings/', SettingsView.as_view(), name='settings')
 ]

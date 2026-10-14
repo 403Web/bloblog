@@ -33,6 +33,7 @@
                 <button type="button" class="btn delete-post-btn" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-delete-url="{% url 'blog:post_delete' pk=post.pk %}">
                     <i class="bi bi-trash3 text-danger"></i>
                 </button>
+                <a href="{% url 'blog:post_update' pk=post.pk %}" class="btn"><i class="bi bi-pencil text-dark-emphasis"></i></a>
                 {% endif %}
                 <h3 class="fw-bold fs-1 my-3">{{ post.title }}</h3>
                 <div class="d-flex justify-content-between align-items-center">

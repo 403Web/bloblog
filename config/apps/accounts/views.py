@@ -16,8 +16,9 @@ from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from apps.blog.models import Post
 
-from .forms import SignUpForm, PasswordResetForm
+from .forms import SignUpForm, PasswordResetForm, ProfileUpdateForm
 
 
 class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
@@ -154,3 +155,23 @@ class PasswordResetConfirmView(DefaultPasswordResetConfirmView):
 
 class ResendPasswordResetView(RedirectView):
     url = reverse_lazy('accounts:reset_password')
+
+
+class SettingsView(View):
+
+    def get(self, request, *args, **kwargs):
+        posts = Post.objects.filter(author=request.user.profile)
+        return render(request, 'auth/settings.html', {'posts': posts})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfileUpdateForm(
+            request.POST,
+            request.FILES,
+            instance=request.user.profile
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:settings') # TODO: messages
+
+        return redirect('accounts:settings') # TODO: messages
