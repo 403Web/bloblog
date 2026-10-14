@@ -1,9 +1,11 @@
-from django.views.generic.base import View
+from django.views.generic.base import View, RedirectView
 from django.views.generic import CreateView
 from django.contrib.auth.views import (
     LoginView,
     LogoutView,
-    PasswordChangeView as DefaultPasswordChangeView
+    PasswordChangeView as DefaultPasswordChangeView,
+    PasswordResetView as DefaultPasswordResetView,
+    PasswordResetConfirmView as DefaultPasswordResetConfirmView
 )
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
@@ -15,7 +17,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 
-from .forms import SignUpForm
+from .forms import SignUpForm, PasswordResetForm
 
 
 class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
@@ -29,12 +31,12 @@ email_verification_token = EmailVerificationTokenGenerator()
 
 def send_email(request, user, template_name):
     token = email_verification_token.make_token(user)
-    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
     context = {
         'user': user,
         'protocol': 'https' if request.is_secure() else 'http',
         'domain': request.get_host(),
-        'uidb64': uidb64,
+        'uid': uid,
         'token': token
     }
 
@@ -75,9 +77,9 @@ class SignUpView(CreateView):
 
 class EmailVerificationView(View):
 
-    def get(self, request, uidb64, token, *args, **kwargs):
+    def get(self, request, uid, token, *args, **kwargs):
         try:
-            pk = urlsafe_base64_decode(uidb64).decode()
+            pk = urlsafe_base64_decode(uid).decode()
             user = User.objects.get(pk=pk)
         except (ValueError, TypeError, OverflowError, User.DoesNotExist):
             user = None
@@ -132,3 +134,23 @@ class PasswordChangeView(DefaultPasswordChangeView):
     def form_valid(self, form):
         response = super().form_valid(form)
         return response # TODO: messages
+
+
+class PasswordResetView(DefaultPasswordResetView):
+    form_class = PasswordResetForm
+    template_name = 'auth/passwords/reset/email_get.html'
+    email_template_name = 'auth/passwords/reset/reset_password.html'
+    success_url = reverse_lazy('accounts:reset_password_done')
+
+
+class PasswordResetConfirmView(DefaultPasswordResetConfirmView):
+    template_name = 'auth/passwords/reset/reset_confirm.html'
+    success_url = reverse_lazy('core:index')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response # TODO: messages
+
+
+class ResendPasswordResetView(RedirectView):
+    url = reverse_lazy('accounts:reset_password')

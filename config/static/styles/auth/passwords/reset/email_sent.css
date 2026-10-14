@@ -31,3 +31,8 @@ body{
         }
     }
 }
+
+.otp-input{
+    width: 15%!important;
+    height: 70px!important;
+}

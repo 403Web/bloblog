@@ -12,7 +12,7 @@
 - [x] SMTP config (settings.dev)
 - [x] Register, signin, signout
 - [x] Change password
-- [ ] Reset Password
+- [x] Reset Password
 - [ ] Change account and profile info
 
 ### Messages

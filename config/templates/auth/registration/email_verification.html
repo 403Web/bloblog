@@ -1,7 +1,7 @@
 {% extends 'mail_templated/base.tpl' %}
 
 {% block subject %}
-Verify Your Email address for BlobLog account
+Verify Your Email Address for BlobLog Account
 {% endblock %}
 
 {% block html %}
@@ -86,7 +86,7 @@ Verify Your Email address for BlobLog account
                     <span class="my-3 ms-2 d-block">Hi {{ user.profile.name }},</span>
                     <p class="text-secondary-emphasis ms-2 my-2">Thanks for signing up for BlobLog!</p>
                     <p class="text-secondary-emphasis ms-2 my-3">Please verify your email address by clicking the button below:</p>
-                    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:email_verification' uidb64=uidb64 token=token %}" class="btn btn-primary p-2 w-100 d-block">
+                    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:email_verification' uidb64=uid token=token %}" class="btn btn-primary p-2 w-100 d-block">
                         Verify Email
                     </a>
                     <p class="text-secondary-emphasis ms-2 my-3">If you didn't create an account on BlobLog, you can safely ignore this email.</p>
@@ -102,7 +102,7 @@ Hi {{ user.profile.name }},
 Thanks for signing up for BlobLog!
 
 Please verify your email address by following the link below:
-{{ protocol }}://{{ domain }}{% url 'accounts:email_verification' uidb64=uidb64 token=token %}
+{{ protocol }}://{{ domain }}{% url 'accounts:email_verification' uidb64=uid token=token %}
 
 If you didn't create an account on BlobLog, you can safely ignore this email.
 
