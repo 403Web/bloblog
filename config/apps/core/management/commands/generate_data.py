@@ -3,7 +3,11 @@ from apps.accounts.management.commands.createuser import Command as UserCreateCo
 from apps.blog.management.commands.createpost import Command as PostCreateCommand
 from apps.blog.management.commands.postlike import Command as PostLikeCreateCommand
 from apps.blog.management.commands.postview import Command as PostViewCreateCommand
+from apps.comment.management.commands.comment import Command as CommentCreateCommand
+from apps.comment.management.commands.reply import Command as ReplyCreateCommand
+from apps.comment.management.commands.comment_like import Command as CommentLikeCreateCommand
 from apps.blog.models import Post
+from apps.comment.models import Comment
 import math
 import random
 
@@ -26,9 +30,15 @@ class Command(BaseCommand):
         post_creator = PostCreateCommand()
         post_like_creator = PostLikeCreateCommand()
         post_view_creator = PostViewCreateCommand()
+        comment_creator = CommentCreateCommand()
+        reply_creator = ReplyCreateCommand()
+        comment_like_creator = CommentLikeCreateCommand()
         post_count = 0
         post_like_count = 0
         post_view_count = 0
+        comment_count = 0
+        reply_count = 0
+        comment_like_count = 0
 
         dependencies = post_creator.check_dependencies()
         if not dependencies:
@@ -95,28 +105,90 @@ class Command(BaseCommand):
                 profile_obj=profile_obj
             )
 
+            stg5 = 'STAGE 5: GENERATE COMMENT OBJECTS'
+            self.stdout.write('\n')
+            self.stdout.write('=' * (len(stg5) + (6 * 2)))
+            self.stdout.write((' ' * 6) + stg5)
+            self.stdout.write('=' * (len(stg5) + (6 * 2)))
+            self.stdout.write('\n')
+            comments_in_iteration = comment_creator.handle_comment_create(
+                posts=posts,
+                profile_obj=profile_obj
+            )
+
+            comments = Comment.objects.all()
+
+            stg6 = 'STAGE 6: GENERATE COMMENT (REPLY) OBJECTS'
+            self.stdout.write('\n')
+            self.stdout.write('=' * (len(stg6) + (6 * 2)))
+            self.stdout.write((' ' * 6) + stg6)
+            self.stdout.write('=' * (len(stg6) + (6 * 2)))
+            self.stdout.write('\n')
+            replies_in_iteration = reply_creator.handle_reply_create(
+                comments=comments,
+                profile_obj=profile_obj
+            )
+
+            stg7 = 'STAGE 7: GENERATE COMMENTLIKE OBJECTS'
+            self.stdout.write('\n')
+            self.stdout.write('=' * (len(stg7) + (6 * 2)))
+            self.stdout.write((' ' * 6) + stg7)
+            self.stdout.write('=' * (len(stg7) + (6 * 2)))
+            self.stdout.write('\n')
+            comment_likes_in_iteration = comment_like_creator.handle_commentlike_create(
+                comments=comments,
+                profile_obj=profile_obj
+            )
+
             post_count += posts_in_iteration
             post_like_count += post_likes_in_iteration
             post_view_count += post_views_in_iteration
+            comment_count += comments_in_iteration
+            reply_count += replies_in_iteration
+            comment_like_count += comment_likes_in_iteration
 
-        longest = lambda a, b, c: max(a, b, c, key=len)
-        biggest = lambda a, b, c: max(a, b, c)
+        longest = lambda a, b, c, d, e, f: max(a, b, c, d, e, f, key=len)
+        biggest = lambda a, b, c, d, e, f: max(a, b, c, d, e, f)
 
         post_msg = ' POST OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
         post_like_msg = ' POSTLIKE OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
         post_view_msg = ' POSTVIEW OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
+        comment_msg = ' COMMENT OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
+        reply_msg = ' COMMENT (REPLY) OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
+        comment_like_msg = ' COMMENTLIKE OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
 
         self.stdout.write('\n')
         self.stdout.write(self.style.SUCCESS(
             '=' * (
                 len(str(
-                    biggest(post_count, post_like_count, post_view_count)
+                    biggest(
+                        post_count,
+                        post_like_count,
+                        post_view_count,
+                        comment_count,
+                        reply_count,
+                        comment_like_count
+                    )
                 )) + math.ceil(len(
-                    longest(post_msg, post_like_msg, post_view_msg)
+                    longest(
+                        post_msg,
+                        post_like_msg,
+                        post_view_msg,
+                        comment_msg,
+                        reply_msg,
+                        comment_like_msg
+                    )
                 ) / 2) - math.ceil(len(result) / 2) - 1
             ) + result + '=' * (
                 math.ceil(len(
-                    longest(post_msg, post_like_msg, post_view_msg)
+                    longest(
+                        post_msg,
+                        post_like_msg,
+                        post_view_msg,
+                        comment_msg,
+                        reply_msg,
+                        comment_like_msg
+                    )
                 ) / 2) - math.ceil(len(result) / 2)
             )
         ))
@@ -133,11 +205,40 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(str(post_view_count) + post_view_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO POSTVIEW OBJECT CREATED.'))
+        if comment_count != 0:
+            self.stdout.write(self.style.SUCCESS(str(comment_count) + comment_msg))
+        else:
+            self.stdout.write(self.style.SUCCESS('NO COMMENT OBJECT CREATED.'))
+        if reply_count != 0:
+            self.stdout.write(self.style.SUCCESS(str(reply_count) + reply_msg))
+        else:
+            self.stdout.write(self.style.SUCCESS('NO COMMENT (REPLY) OBJECT CREATED.'))
+        if comment_like_count != 0:
+            self.stdout.write(self.style.SUCCESS(str(comment_like_count) + comment_like_msg))
+        else:
+            self.stdout.write(self.style.SUCCESS('NO COMMENTLIKE OBJECT CREATED.'))
+
 
         self.stdout.write(self.style.SUCCESS(
             '=' * (
                 len(str(
-                    biggest(post_count, post_like_count, post_view_count)
-                )) + len(longest(post_msg, post_like_msg, post_view_msg))
+                    biggest(
+                        post_count,
+                        post_like_count,
+                        post_view_count,
+                        comment_count,
+                        reply_count,
+                        comment_like_count
+                    )
+                )) + len(
+                    longest(
+                        post_msg,
+                        post_like_msg,
+                        post_view_msg,
+                        comment_msg,
+                        reply_msg,
+                        comment_like_msg
+                    )
+                )
             )
         ))

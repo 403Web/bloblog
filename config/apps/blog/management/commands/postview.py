@@ -33,7 +33,7 @@ class Command(BaseCommand):
         return user_creator.handle_user_create(timeout)
 
     def handle_postview_create(self, posts, profile_obj):
-        post_like_count = 0
+        post_view_count = 0
 
         for post in posts:
 
@@ -48,7 +48,7 @@ class Command(BaseCommand):
                             post=post, user=profile_obj
                         )
                         self.stdout.write(self.style.SUCCESS(' DONE'))
-                        post_like_count += 1
+                        post_view_count += 1
                     except IntegrityError:
                         self.stdout.write(self.style.WARNING(
                             'Unique constraint failed, SKIPPING'
@@ -66,13 +66,13 @@ class Command(BaseCommand):
                         post=post, user=profile_obj
                     )
                     self.stdout.write(self.style.SUCCESS(' DONE'))
-                    post_like_count += 1
+                    post_view_count += 1
                 except IntegrityError:
                     self.stdout.write(self.style.WARNING(
                         'Unique constraint failed, SKIPPING'
                     ))
 
-        return post_like_count
+        return post_view_count
 
     def handle(self, *args, **options):
         result = ' RESULT '
@@ -103,13 +103,13 @@ class Command(BaseCommand):
         self.stdout.write((' ' * 6) + stg2)
         self.stdout.write('=' * (len(stg2) + (6 * 2)))
         self.stdout.write('\n')
-        post_like_count = self.handle_postview_create(
+        post_view_count = self.handle_postview_create(
             posts=posts,
             profile_obj=profile_obj
         )
 
         self.stdout.write('\n')
-        match post_like_count:
+        match post_view_count:
             case 0:
                 msg = 'NO POSTVIEW OBJECT CREATED.'
                 self.stdout.write(
@@ -126,14 +126,14 @@ class Command(BaseCommand):
 
                 self.stdout.write(
                     '=' * (
-                        len(str(post_like_count)) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
+                        len(str(post_view_count)) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
                     ) + result + '=' * (
                         math.ceil(len(msg) / 2) - math.ceil(len(result) / 2)
                     )
                 )
-                self.stdout.write(str(post_like_count) + msg)
+                self.stdout.write(str(post_view_count) + msg)
                 self.stdout.write(
                     '=' * (
-                        len(str(post_like_count)) + len(msg)
+                        len(str(post_view_count)) + len(msg)
                     )
                 )
