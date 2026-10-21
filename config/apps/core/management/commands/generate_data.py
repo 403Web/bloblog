@@ -122,20 +122,22 @@ class Command(BaseCommand):
         ))
 
         if post_count != 0:
-            self.stdout.write(self.style.SUCCESS(post_count + post_msg))
+            self.stdout.write(self.style.SUCCESS(str(post_count) + post_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO POST OBJECT CREATED.'))
         if post_like_count != 0:
-            self.stdout.write(self.style.SUCCESS(post_like_count + post_like_msg))
+            self.stdout.write(self.style.SUCCESS(str(post_like_count) + post_like_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO POSTLIKE OBJECT CREATED.'))
         if post_view_count != 0:
-            self.stdout.write(self.style.SUCCESS(post_view_count + post_view_msg))
+            self.stdout.write(self.style.SUCCESS(str(post_view_count) + post_view_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO POSTVIEW OBJECT CREATED.'))
 
         self.stdout.write(self.style.SUCCESS(
             '=' * (
-                len(str(post_count)) + len(longest(post_msg, post_like_msg, post_view_msg))
+                len(str(
+                    biggest(post_count, post_like_count, post_view_count)
+                )) + len(longest(post_msg, post_like_msg, post_view_msg))
             )
         ))

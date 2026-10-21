@@ -21,7 +21,7 @@ class Command(BaseCommand):
         if not posts:
             self.stdout.write(
                 self.style.ERROR(
-                    'Post objects have not been found.\n'
+                    'No Post object found.\n'
                     'Try running "python manage.py createpost" first.\n'
                 )
             )
@@ -43,18 +43,18 @@ class Command(BaseCommand):
                     f'Creating PostView object for post with id {post.pk}...',
                     ending=''
                 )
-                try:
-                    PostView.objects.create(
-                        post=post, user=profile_obj
-                    )
-                    self.stdout.write(self.style.SUCCESS(' DONE'))
-                    post_like_count += 1
-                except IntegrityError:
-                    self.stdout.write(self.style.WARNING(
-                        'Unique constraint failed, SKIPPING'
-                    ))
+                    try:
+                        PostView.objects.create(
+                            post=post, user=profile_obj
+                        )
+                        self.stdout.write(self.style.SUCCESS(' DONE'))
+                        post_like_count += 1
+                    except IntegrityError:
+                        self.stdout.write(self.style.WARNING(
+                            'Unique constraint failed, SKIPPING'
+                        ))
 
-                continue
+                    continue
 
             if random.choice((True, False)):
                 self.stdout.write(
