@@ -5,7 +5,7 @@
 - [x] Add PostView.get_or_create to PostRetrieveView
 - [x] Add PostLike to blog app (views)
 - [x] Commenting system
-- [ ] Add commands for creating PostView, PostLike, Comment and CommentLike objects
+- [x] Add commands for creating PostView, PostLike, Comment and CommentLike objects
 - [ ] Add username field to user model and update structure
 
 ### Accounts and Authentication

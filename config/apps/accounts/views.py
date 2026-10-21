@@ -11,13 +11,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from mail_templated import EmailMessage
 from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from apps.accounts.models import Profile
 from apps.blog.models import Post
 
+from .models import Follow
 from .forms import SignUpForm, PasswordResetForm, ProfileUpdateForm
 
 
@@ -155,6 +158,41 @@ class PasswordResetConfirmView(DefaultPasswordResetConfirmView):
 
 class ResendPasswordResetView(RedirectView):
     url = reverse_lazy('accounts:reset_password')
+
+
+class FollowView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        user = Profile.objects.get(pk=pk)
+
+        if user != request.user.profile:
+            follow, created = Follow.objects.get_or_create(
+                following=user,
+                follower=request.user.profile
+            )
+
+            if not created:
+                follow.delete()
+
+        return redirect(request.META.get('HTTP_REFERER', reverse_lazy('accounts:settings')))
+
+
+class ProfileView(View):
+
+    def get(self, request, pk, *args, **kwargs):
+        data = get_object_or_404(Profile, pk=pk)
+
+        if data == request.user.profile:
+            return redirect('accounts:settings')
+
+        context = {
+            'data': data,
+            'followed': True if Follow.objects.filter(
+                following=data,
+                follower=request.user.profile
+            ).exists() else False
+        }
+        return render(request, 'auth/profile.html', context)
 
 
 class SettingsView(View):
