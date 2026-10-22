@@ -1,16 +1,16 @@
 from django.core.management.base import BaseCommand
+from apps.accounts.management.commands.createuser import Command as UserCreateCommand
 from django.core.files.base import ContentFile
-from apps.accounts.models import Profile
 from apps.blog.models import Post, Category
-from django.db import IntegrityError
-from django.contrib.auth import get_user_model
 from faker import Faker
 from PIL import Image, UnidentifiedImageError
 from io import BytesIO
 import requests
 import random
+import math
 
 
+CATEGORIES = tuple(Category.objects.all())
 RATIOS = [
     (16, 9),
     (4, 3),
@@ -34,74 +34,24 @@ class Command(BaseCommand):
         parser.add_argument('-c', '--count', type=int, default=3)
         parser.add_argument('-t', '--timeout', type=int, default=3)
 
-    def handle_post_create(self, count, timeout):
-        post_count = 0
-
-        CATEGORIES = tuple(Category.objects.all())
+    def check_dependencies(self):
         if not CATEGORIES:
             self.stdout.write(
                 self.style.ERROR(
-                    'Category objects have not been found.'
-                    ' Try running "python manage.py createcategories" or'
-                    ' "python manage.py db_init" first.'
+                    'Category objects have not been found.\n'
+                    'Try running "python manage.py createcategories" or'
+                    ' "python manage.py db_init" first.\n'
                 )
             )
-            return (False, 'NO_OBJECT')
+            return False
+        return True
 
-        self.stdout.write('Creating new user object...', ending='')
-        try:
-            user_obj = get_user_model().objects.create_user(
-                email=self.fake.email(), password='a/@234a/?'
-            )
-        except IntegrityError:
-            self.stdout.write(self.style.WARNING(
-                ' Unique constraint failed: accounts.User.email, SKIPPING'
-            ))
-            return (False, 'INTEGRITY_ERROR')
-        self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
-        self.stdout.write(f'email: {user_obj.email}')
+    def handle_user_create(self, timeout):
+        user_creator = UserCreateCommand()
+        return user_creator.handle_user_create(timeout)
 
-        self.stdout.write('Getting user profile object...', ending='')
-        profile_obj = Profile.objects.get(user=user_obj)
-        self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
-        self.stdout.write(f'name: {profile_obj.name}')
-
-        size = random.randint(150, 600)
-        url = f'https://i.pravatar.cc/{size}?img={profile_obj.name}'
-        self.stdout.write('Setting avatar for user profile object...', ending='')
-        try:
-            response = requests.get(url, timeout=timeout)
-
-            if (
-                response.status_code == 200 and
-                response.headers.get('Content-Type', '').startswith('image/')
-            ):
-                try:
-                    img_format = Image.open(BytesIO(response.content)).format.lower()
-                    profile_obj.avatar.save(
-                        f'avatar_{profile_obj.name}.{img_format}',
-                        ContentFile(response.content)
-                    )
-
-                    self.stdout.write(self.style.SUCCESS(' SUCCESSFUL'))
-                except UnidentifiedImageError:
-                    self.stdout.write(
-                        self.style.WARNING(' Invalid avatar response, SKIPPING')
-                    )
-
-            else:
-                self.stdout.write(
-                    self.style.WARNING(' Invalid avatar response, SKIPPING')
-                )
-
-        except requests.exceptions.Timeout:
-            self.stdout.write(
-                self.style.WARNING(' Request timed out for avatar, SKIPPING')
-            )
-        except requests.exceptions.RequestException:
-            self.stdout.write(
-                self.style.WARNING(' Request failed for avatar, SKIPPING')
-            )
+    def handle_post_create(self, count, timeout, profile_obj):
+        post_count = 0
 
         for idx in range(count):
             ratio = random.choice(RATIOS)
@@ -162,14 +112,52 @@ class Command(BaseCommand):
         return post_count
 
     def handle(self, *args, **options):
+        result = ' RESULT '
+        dependencies = self.check_dependencies()
+        if not dependencies:
+            msg = 'NO POST OBJECT CREATED.'
+            self.stdout.write(
+                '=' * (
+                    math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
+                ) + result + '=' * (
+                    math.ceil(len(msg) / 2) - math.ceil(len(result) / 2)
+                )
+            )
+            self.stdout.write(msg)
+            self.stdout.write('=' * len(msg))
+            return
+
+        stg1 = 'STAGE 1: GENERATE USER OBJECT'
+        self.stdout.write('=' * (len(stg1) + (6 * 2)))
+        self.stdout.write((' ' * 6) + stg1)
+        self.stdout.write('=' * (len(stg1) + (6 * 2)))
+        self.stdout.write('\n')
+        _, profile_obj = self.handle_user_create(options.get('timeout'))
+
+        stg2 = 'STAGE 2: GENERATE POST OBJECTS'
+        self.stdout.write('\n')
+        self.stdout.write('=' * (len(stg2) + (6 * 2)))
+        self.stdout.write((' ' * 6) + stg2)
+        self.stdout.write('=' * (len(stg2) + (6 * 2)))
+        self.stdout.write('\n')
         post_count = self.handle_post_create(
-            count=options.get('count'), timeout=options.get('timeout')
+            count=options.get('count'),
+            timeout=options.get('timeout'),
+            profile_obj=profile_obj
         )
 
-        match post_count:
-            case (False, 'NO_OBJECT'):
-                self.stdout.write('NO POST OBJECT CREATED.')
-            case (False, 'INTEGRITY_ERROR'):
-                pass
-            case _:
-                self.stdout.write(f'{post_count} POST OBJECTS HAVE BEEN CREATED SUCCESSFULLY.')
+        msg = ' POST OBJECT(S) HAVE BEEN CREATED SUCCESSFULLY.'
+        self.stdout.write('\n')
+        self.stdout.write(
+            '=' * (
+                len(str(post_count)) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
+            ) + result + '=' * (
+                math.ceil(len(msg) / 2) - math.ceil(len(result) / 2)
+            )
+        )
+        self.stdout.write(str(post_count) + msg)
+        self.stdout.write(
+            '=' * (
+                len(str(post_count)) + len(msg)
+            )
+        )

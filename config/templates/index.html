@@ -58,7 +58,7 @@
                             <div class="card-body">
                                 <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
                                 <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                                {{ post.title }}
+                                {{ post.title | truncatechars:62 }}
                                 </p>
                                 <div class="my-3">
                                 <img class="rounded-circle" src="{{ post.author.avatar.url }}" width="36" height="36" alt="">

@@ -4,26 +4,30 @@
 ## TODO
 - [x] Add PostView.get_or_create to PostRetrieveView
 - [x] Add PostLike to blog app (views)
-- [x] Commenting system (comment app)
+- [x] Commenting system
+- [x] Add commands for creating PostView, PostLike, Comment and CommentLike objects
+- [ ] Add username field to user model and update structure
 
 ### Accounts and Authentication
 - [x] Add smtp4dev service to docker compose
 - [x] SMTP config (settings.dev)
 - [x] Register, signin, signout
-- [ ] Change password
-- [ ] Reset Password
-- [ ] Change account and profile info
+- [x] Change password
+- [x] Reset Password
+- [x] Change account and profile info
 
 ### Messages
 - [ ] Messages
 
 ### API
+- [ ] Add Swagger
+
 Blog:
 - [x] Add PostView.get_or_create to PostViewSet.retrieve
-- [ ] Add commenting system to PostViewSet (actions)
+- [ ] Add name, avatar and page url to user fields (API)
 
 Comment:
-- [ ] Add view to the comments of a specific post (by PK)
+- [x] Add commenting system
 
 Accounts:
 - [ ] Register

@@ -45,7 +45,7 @@
                     <a href="{% url 'blog:post_list' %}" class="nav-link  py-0 nav-buttons">Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link  py-0 nav-buttons">Profile</a>
+                    <a href="{% url 'accounts:settings' %}" class="nav-link  py-0 nav-buttons">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a href="#footer" class="nav-link  py-0 nav-buttons">Contact</a>
@@ -85,15 +85,15 @@
                             </div>
                             <ul class="list-unstyled w-100 flex-column px-3">
                                 <li class="">
-                                    <a href="" class=" text-secondary-emphasis text-decoration-none">
+                                    <a href="{% url 'accounts:settings' %}" class=" text-secondary-emphasis text-decoration-none">
                                         <i class="bi bi-gear fs-6 me-1"></i>
                                         <span class="text-secondary">Setting</span>
                                     </a>
                                 </li>
                                 <li class="my-2">
-                                    <a href="" class=" text-secondary-emphasis text-decoration-none">
-                                        <i class="bi bi-person-add fs-6 me-1"></i>
-                                        <span class="text-secondary">Add Account</span>
+                                    <a href="{% url 'accounts:change_password' %}" class=" text-secondary-emphasis text-decoration-none">
+                                        <i class="bi bi-key add fs-6 me-1"></i>
+                                        <span class="text-secondary">Change Password</span>
                                     </a>
                                 </li>
                                 <li>

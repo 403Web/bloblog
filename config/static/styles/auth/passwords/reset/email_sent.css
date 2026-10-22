@@ -1,0 +1,38 @@
+.work-sans{
+    font-family: "Work Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body{
+    height: 100vh;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.back-icon{
+    left: 95%;
+}
+
+.signin-box{
+    width: 30%;
+}
+
+@media (max-width: 991.98px) { 
+    .signin-box{
+        width: 50%;
+    }
+    @media (max-width: 575.98px) { 
+        .signin-box{
+            width: 80%;
+        }
+    }
+}
+
+.otp-input{
+    width: 15%!important;
+    height: 70px!important;
+}

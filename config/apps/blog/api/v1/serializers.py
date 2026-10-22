@@ -1,14 +1,15 @@
 from rest_framework import serializers
 from django.urls import reverse
-from apps.accounts.models import Profile
 
 from ...models import Post, PostView, PostLike, Category
+
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
         fields = ['id', 'name']
+
 
 class PostSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
@@ -21,6 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
     )
     likes = serializers.SerializerMethodField()
     views = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -36,6 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
             'category_pk',
             'likes',
             'views',
+            'comments',
             'created_date',
             'updated_date'
         ]
@@ -47,6 +50,7 @@ class PostSerializer(serializers.ModelSerializer):
             'category',
             'likes',
             'views',
+            'comments',
             'created_date',
             'updated_date'
         ]
@@ -54,8 +58,10 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj):
         request = self.context.get('request')
+
         relative = reverse('blog_api_v1:post-detail', kwargs={'pk': obj.pk})
         absolute = request.build_absolute_uri(relative) if request else None
+
         return {
             'absolute': absolute,
             'relative': relative
@@ -97,20 +103,35 @@ class PostSerializer(serializers.ModelSerializer):
             'by_user': viewed_by_user
         }
 
+    def get_comments(self, obj):
+        request = self.context.get('request')
+
+        relative = reverse('comment_api_v1:comment-list', kwargs={'post_pk': obj.pk})
+        absolute = request.build_absolute_uri(relative) if request else None
+
+        return {
+            'count': obj.comments.count(),
+            'url': {
+                'absolute': absolute,
+                'relative': relative
+            }
+        }
+
     def to_representation(self, instance):
         request = self.context.get('request')
         rep = super().to_representation(instance)
+
         if request.parser_context.get('kwargs').get('pk'):
             rep.pop('url', None)
             rep.pop('snippet', None)
         else:
             rep.pop('content', None)
+            rep['comments'] = rep.get('comments').get('count')
+
         return rep
 
     def create(self, validated_data):
-        validated_data['author'] = Profile.objects.get(
-            user=self.context.get('request').user
-        )
+        validated_data['author'] = self.context.get('request').user.profile
         return super().create(validated_data)
 
 

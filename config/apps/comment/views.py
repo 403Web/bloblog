@@ -1,5 +1,5 @@
 from django.views.generic.base import View
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from apps.blog.models import Post
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -18,6 +18,17 @@ class CommentCreateView(CreateView):
         form.instance.post = Post.objects.get(pk=post_pk)
         
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post_detail', kwargs={'pk': self.kwargs.get('post_pk')})
+
+
+class CommentEditView(UpdateView):
+    model = Comment
+    pk_url_kwarg = 'comment_pk'
+    form_class = CommentForm
+
+    template_name = 'blog/post_detail.html'
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.kwargs.get('post_pk')})
