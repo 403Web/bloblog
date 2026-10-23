@@ -7,34 +7,34 @@ register = template.Library()
 
 
 intword_converters = (
-    (3, lambda number: ngettext("%(value)sK", "%(value)sK", number)),
-    (6, lambda number: ngettext("%(value)sM", "%(value)sM", number)),
-    (9, lambda number: ngettext("%(value)sB", "%(value)sB", number)),
-    (12, lambda number: ngettext("%(value)sT", "%(value)sT", number)),
+    (3, lambda number: ngettext('%(value)sK', '%(value)sK', number)),
+    (6, lambda number: ngettext('%(value)sM', '%(value)sM', number)),
+    (9, lambda number: ngettext('%(value)sB', '%(value)sB', number)),
+    (12, lambda number: ngettext('%(value)sT', '%(value)sT', number)),
     (
         15,
         lambda number: ngettext(
-            "%(value)sQa", "%(value)sQa", number
+            '%(value)sQa', '%(value)sQa', number
         ),
     ),
     (
         18,
         lambda number: ngettext(
-            "%(value)sQi", "%(value)sQi", number
+            '%(value)sQi', '%(value)sQi', number
         ),
     ),
     (
         21,
-        lambda number: ngettext("%(value)sSx", "%(value)sSx", number),
+        lambda number: ngettext('%(value)sSx', '%(value)sSx', number),
     ),
     (
         24,
-        lambda number: ngettext("%(value)sSp", "%(value)sSp", number),
+        lambda number: ngettext('%(value)sSp', '%(value)sSp', number),
     ),
-    (27, lambda number: ngettext("%(value)sOc", "%(value)sOc", number)),
-    (30, lambda number: ngettext("%(value)sNo", "%(value)sNo", number)),
-    (33, lambda number: ngettext("%(value)sDc", "%(value)sDc", number)),
-    (100, lambda number: ngettext("%(value)s googol", "%(value)s googol", number)),
+    (27, lambda number: ngettext('%(value)sOc', '%(value)sOc', number)),
+    (30, lambda number: ngettext('%(value)sNo', '%(value)sNo', number)),
+    (33, lambda number: ngettext('%(value)sDc', '%(value)sDc', number)),
+    (100, lambda number: ngettext('%(value)s googol', '%(value)s googol', number)),
 )
 
 
@@ -55,6 +55,6 @@ def intword(value):
             new_value = value / large_number
             rounded_value = round_away_from_one(new_value)
             return converter(abs(rounded_value)) % {
-                "value": defaultfilters.floatformat(new_value, -1),
+                'value': defaultfilters.floatformat(new_value, -1),
             }
     return value

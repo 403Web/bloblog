@@ -16,7 +16,8 @@ class Command(BaseCommand):
         User = get_user_model()
 
         deleted_user, created = User.objects.get_or_create(
-            email=settings.DELETED_USER_EMAIL
+            email=settings.DELETED_USER_EMAIL,
+            username=settings.DELETED_USER_USERNAME
         )
         if created:
             deleted_user.set_unusable_password()

@@ -6,7 +6,7 @@
 - [x] Add PostLike to blog app (views)
 - [x] Commenting system
 - [x] Add commands for creating PostView, PostLike, Comment and CommentLike objects
-- [ ] Add username field to user model and update structure
+- [x] Add username field to user model and update structure (WARNING: may cause further errors and bugs)
 
 ### Accounts and Authentication
 - [x] Add smtp4dev service to docker compose

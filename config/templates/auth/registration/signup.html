@@ -47,12 +47,22 @@
                     <span class="fs-5 fw-bold my-2 d-block">Sign Up</span>
                     <span class="text-secondary-emphasis ms-2">Enter Your Email</span>
                     <div class="form-floating">
-                        <input name="email" type="email" class="form-control my-2" id="floatingemail" placeholder="Password" value="{{ form.data.email | default:'' }}">
-                        <label for="floatingemail">Email</label>
+                        <input name="email" type="email" class="form-control my-2" id="floatingEmail" placeholder="Password" value="{{ form.data.email | default:'' }}">
+                        <label for="floatingEmail">Email</label>
                     </div>
                     {% if form.errors.email %}
                         <div>
                             <span class="field-error">{{ form.errors.email }}</span>
+                        </div>
+                    {% endif %}
+                    <span class="text-secondary-emphasis ms-2">Enter Your Username</span>
+                    <div class="form-floating">
+                        <input name="username" type="text" class="form-control my-2" id="floatingUsername" placeholder="Username" value="{{ form.data.username | default:'' }}">
+                        <label for="floatingUsername">Username</label>
+                    </div>
+                    {% if form.errors.username %}
+                        <div>
+                            <span class="field-error">{{ form.errors.username }}</span>
                         </div>
                     {% endif %}
                     <span class="text-secondary-emphasis ms-2 mt-2">Choose a Password</span>
@@ -67,8 +77,8 @@
                     {% endif %}
                     <span class="text-secondary-emphasis ms-2 mt-2">Confirm Your Password</span>
                     <div class="form-floating">
-                        <input name="password2" type="password" class="form-control my-2" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword">Confirm Your Password</label>
+                        <input name="password2" type="password" class="form-control my-2" id="floatingPassword2" placeholder="Password">
+                        <label for="floatingPassword2">Confirm Your Password</label>
                     </div>
                     {% if form.errors.password2 %}
                         <div>

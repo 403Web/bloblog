@@ -12,9 +12,13 @@ User = get_user_model()
 
 @receiver(post_save, sender=User)
 def create_profile_on_user_create(sender, instance, created, **kwargs):
-    if created and instance.email != settings.DELETED_USER_EMAIL:
+    if (
+        created and
+        instance.email != settings.DELETED_USER_EMAIL and
+        instance.username != settings.DELETED_USER_USERNAME
+    ):
         Profile.objects.create(
-            user=instance, name=instance.email.split('@')[0]
+            user=instance, name=instance.username
         )
 
 

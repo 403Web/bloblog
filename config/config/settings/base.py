@@ -140,10 +140,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# user model
+# authentication
 AUTH_USER_MODEL = 'accounts.User'
+AUTHENTICATION_BACKENDS = [
+    'apps.accounts.backends.AuthBackend'
+]
 
 # deleted user
+DELETED_USER_USERNAME = 'deleted_user'
 DELETED_USER_EMAIL = 'deleted_user@system.local'
 
 # rest framework config

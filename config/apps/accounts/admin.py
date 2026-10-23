@@ -15,10 +15,10 @@ class UserAdmin(BaseUserAdmin):
         'email', 'id', 'is_superuser', 'is_verified', 'date_joined', 'updated_date'
     )
     list_filter = ('is_superuser', 'is_staff', 'is_active', 'is_verified')
-    search_fields = ('id', 'email')
+    search_fields = ('id', 'email', 'username')
 
     fieldsets = (
-        ('AUTHENTICATION', {'fields': ('email', 'password')}),
+        ('AUTHENTICATION', {'fields': ('email', 'username', 'password')}),
         ('STATUS', {
             'fields': ('is_superuser', 'is_staff', 'is_active', 'is_verified')
         }),
@@ -31,7 +31,7 @@ class UserAdmin(BaseUserAdmin):
             None, {
                 'classes': ('wide',),
                 'fields': (
-                    'email', 'password1', 'password2',
+                    'email', 'username', 'password1', 'password2',
                     'is_superuser', 'is_staff', 'is_active', 'is_verified'
                 )
             },
