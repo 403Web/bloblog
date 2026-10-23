@@ -19,6 +19,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from apps.accounts.models import Profile
 from apps.blog.models import Post
+from django.conf import settings
 
 from .models import Follow
 from .forms import SignUpForm, PasswordResetForm, ProfileUpdateForm
@@ -182,7 +183,10 @@ class ProfileView(View):
     def get(self, request, pk, *args, **kwargs):
         data = get_object_or_404(Profile, pk=pk)
 
-        if data == request.user.profile:
+        if (
+            data == request.user.profile or
+            data.user.email == settings.DELETED_USER_EMAIL
+        ):
             return redirect('accounts:settings')
 
         context = {
