@@ -2,19 +2,6 @@
 
 
 ## TODO
-- [x] Add PostView.get_or_create to PostRetrieveView
-- [x] Add PostLike to blog app (views)
-- [x] Commenting system
-- [x] Add commands for creating PostView, PostLike, Comment and CommentLike objects
-- [x] Add username field to user model and update structure (WARNING: may cause further errors and bugs)
-
-### Accounts and Authentication
-- [x] Add smtp4dev service to docker compose
-- [x] SMTP config (settings.dev)
-- [x] Register, signin, signout
-- [x] Change password
-- [x] Reset Password
-- [x] Change account and profile info
 
 ### Messages
 - [ ] Messages
@@ -25,9 +12,6 @@
 Blog:
 - [x] Add PostView.get_or_create to PostViewSet.retrieve
 - [ ] Add name, avatar and page url to user fields (API)
-
-Comment:
-- [x] Add commenting system
 
 Accounts:
 - [ ] Register
