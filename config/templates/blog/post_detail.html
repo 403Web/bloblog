@@ -38,8 +38,10 @@
                 <h3 class="fw-bold fs-1 my-3">{{ post.title }}</h3>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <img class="rounded-circle me-1" src="{{ post.author.avatar.url }}" width="32px" alt="">
-                        <span class="small text-secondary">{{ post.author.name }}</span>
+                        <a href="{% url 'accounts:profile' pk=post.author.pk %}" class="text-dark-emphasis text-decoration-none">
+                            <img class="rounded-circle me-1" src="{{ post.author.avatar.url }}" width="32px" alt="">
+                        </a>
+                        <a href="{% url 'accounts:profile' pk=post.author.pk %}" class="small text-secondary text-dark-emphasis text-decoration-none">{{ post.author.name }}</a>
                         <span class="small text-secondary ms-3">{{ post.created_date | date:'M d, Y | H:i A' }}</span>
                     </div>
                     <div class="d-flex align-items-center">
@@ -95,8 +97,10 @@
                     <div class="d-flex Justify-content-between flex-no-wrap">
                         <div class="d-flex Justify-content-between flex-no-wrap">
                             <div>
-                                <img src="{{ comment.user.avatar.url }}" width="40px" class="rounded-circle me-2" alt="">
-                                <span class="fw-semibold me-1">{{ comment.user.name }}</span>
+                                <a href="{% url 'accounts:profile' pk=comment.user.pk %}" class="text-dark-emphasis text-decoration-none">
+                                    <img src="{{ comment.user.avatar.url }}" width="40px" class="rounded-circle me-2" alt="">
+                                </a>
+                                <a href="{% url 'accounts:profile' pk=comment.user.pk %}" class="fw-semibold me-1 text-dark-emphasis text-decoration-none">{{ comment.user.name }}</a>
                                 <span class="small text-secondary">{{ comment.created_date | naturaltime }}</span>
                             </div>
                             {% if comment.user == request.user.profile %}
@@ -143,8 +147,10 @@
                                 <div class="d-flex Justify-content-between flex-no-wrap">
                                     <div class="d-flex Justify-content-between flex-no-wrap">
                                         <div>
-                                            <img src="{{ reply.user.avatar.url }}" width="30px" class="rounded-circle me-2" alt="">
-                                            <span class="fw-semibold me-1 small">{{ reply.user.name }}</span>
+                                            <a href="{% url 'accounts:profile' pk=reply.user.pk %}" class="text-dark-emphasis text-decoration-none">
+                                                <img src="{{ reply.user.avatar.url }}" width="30px" class="rounded-circle me-2" alt="">
+                                            </a>
+                                            <a href="{% url 'accounts:profile' pk=reply.user.pk %}" class="fw-semibold me-1 small text-dark-emphasis text-decoration-none">{{ reply.user.name }}</a>
                                             <span class="small text-secondary">{{ reply.created_date | naturaltime }}</span>
                                         </div>
                                         {% if reply.user == request.user.profile %}

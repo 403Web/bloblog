@@ -37,6 +37,7 @@ Accounts:
 - [ ] Change account and profile info
 
 ### Final Initializations
+- [ ] Email threading
 - [ ] Add periodic tasks
 - [ ] Tests
 - [ ] GitHub actions (run tests on push)
