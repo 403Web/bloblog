@@ -89,10 +89,20 @@
                             <span class="small text-secondary">Joined since {{ follower.follower.user.date_joined | date:'M, Y' }}</span>
                         </div>
                     </div>
-                    {% if following.following != request.user.profile %}                    
-                        <button class="btn btn-primary p-2 follow-btn">Follow</button>
+                    {% if request.user.is_authenticated %}
+                        {% if following.following != request.user.profile %}
+                            <form method="post" action="{% url 'accounts:follow' pk=following.following.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary p-2 follow-btn">Follow</button>
+                            </form>
+                        {% else %}
+                            <button class="btn">You</button>
+                        {% endif %}
                     {% else %}
-                        <button class="btn btn-primary p-2 follow-btn">You</button>
+                        <form method="post" action="{% url 'accounts:follow' pk=following.following.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary p-2 follow-btn">Follow</button>
+                        </form>
                     {% endif %}
                 </div>
                 <hr class="border-1 border border-secondary">
@@ -116,10 +126,20 @@
                             <span class="small text-secondary">Joined since {{ follower.follower.user.date_joined | date:'M, Y' }}</span>
                         </div>
                     </div>
-                    {% if follower.follower != request.user.profile %}                    
-                        <button class="btn btn-primary p-2 follow-btn">Follow</button>
+                    {% if request.user.is_authenticated %}
+                        {% if follower.follower != request.user.profile %}
+                            <form method="post" action="{% url 'accounts:follow' pk=follower.follower.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary p-2 follow-btn">Follow</button>
+                            </form>
+                        {% else %}
+                            <button class="btn">You</button>
+                        {% endif %}
                     {% else %}
-                        <button class="btn">You</button>
+                        <form method="post" action="{% url 'accounts:follow' pk=follower.follower.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary p-2 follow-btn">Follow</button>
+                        </form>
                     {% endif %}
                 </div>
                 <hr class="border-1 border border-secondary">

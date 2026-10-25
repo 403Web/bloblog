@@ -82,9 +82,9 @@ class SignUpView(CreateView):
 
 class EmailVerificationView(View):
 
-    def get(self, request, uid, token, *args, **kwargs):
+    def get(self, request, uidb64, token, *args, **kwargs):
         try:
-            pk = urlsafe_base64_decode(uid).decode()
+            pk = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(pk=pk)
         except (ValueError, TypeError, OverflowError, User.DoesNotExist):
             user = None
@@ -183,18 +183,21 @@ class ProfileView(View):
     def get(self, request, pk, *args, **kwargs):
         data = get_object_or_404(Profile, pk=pk)
 
-        if (
-            data == request.user.profile or
-            data.user.email == settings.DELETED_USER_EMAIL
-        ):
+        if request.user.is_authenticated:
+            if data == request.user.profile:
+                return redirect('accounts:settings')
+
+        if data.user.email == settings.DELETED_USER_EMAIL:
             return redirect('accounts:settings')
 
         context = {
             'data': data,
-            'followed': True if Follow.objects.filter(
-                following=data,
-                follower=request.user.profile
-            ).exists() else False
+            'followed': (
+                True if Follow.objects.filter(
+                    following=data,
+                    follower=request.user.profile
+                ).exists() else False
+            ) if request.user.is_authenticated else False
         }
         return render(request, 'auth/profile.html', context)
 

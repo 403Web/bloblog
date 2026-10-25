@@ -53,7 +53,7 @@
             <span class=" fw-bold fs-4 ms-2 my-3 d-block">My Posts</span>
             <div class="d-flex blogs flex-wrap">
                 {% for post in posts %}
-                <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
+                <a href="{% url 'blog:post_detail' pk=post.pk %}" class="card blog border border-1 border-secondary-subtle m-3 p-2 text-decoration-none">
                     <img src="{{ post.image.url }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
@@ -68,7 +68,7 @@
                         <span class="small header-inf">{{ post.created_date | date:'M d, Y' }}</span>
                     </div>
                     </div>
-                </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
