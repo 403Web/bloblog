@@ -80,18 +80,35 @@
                                 <img src="{{ request.user.profile.avatar.url }}" width="50px" height="50px" class="rounded-circle img-thumbnail" alt="">
                             </div>
                             <div class="d-flex align-items-center py-2">
-                                <span class="spinner-grow-sm spinner-grow text-success me-1"></span>
+                                <span class="spinner-grow-sm spinner-grow text-{% if not request.user.is_verified %}warning{% else %}success{% endif %} me-1"></span>
                                 <span class="small fw-semibold">{{ request.user.profile.name }}</span>
                             </div>
                             <ul class="list-unstyled w-100 flex-column px-3">
-                                <li class="">
-                                    <a href="{% url 'accounts:settings' %}" class=" text-secondary-emphasis text-decoration-none">
+                                {% if not request.user.is_verified %}
+                                    <li>
+                                        <form method="post" action="{% url 'accounts:resend_verification' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn p-0 text-secondary-emphasis text-decoration-none">
+                                                <i class="bi bi-person-check"></i>
+                                                <span class="text-secondary">Verify Your Email</span>
+                                            </button>
+                                        </form>
+                                    </li>
+                                {% endif %}
+                                <li {% if not request.user.is_verified %}class="my-2"{% endif %}>
+                                    <a href="{% url 'accounts:profile_me' %}" class="text-secondary-emphasis text-decoration-none">
+                                        <i class="bi bi-person-fill"></i>
+                                        <span class="text-secondary">My Blob</span>
+                                    </a>
+                                </li>
+                                <li class="my-2">
+                                    <a href="{% url 'accounts:settings' %}" class="text-secondary-emphasis text-decoration-none">
                                         <i class="bi bi-gear fs-6 me-1"></i>
                                         <span class="text-secondary">Setting</span>
                                     </a>
                                 </li>
                                 <li class="my-2">
-                                    <a href="{% url 'accounts:change_password' %}" class=" text-secondary-emphasis text-decoration-none">
+                                    <a href="{% url 'accounts:change_password' %}" class="text-secondary-emphasis text-decoration-none">
                                         <i class="bi bi-key add fs-6 me-1"></i>
                                         <span class="text-secondary">Change Password</span>
                                     </a>
@@ -285,8 +302,16 @@
             </div>
         </div>
     </div>
-
-    <div id="ID" class="position-fixed z-3 logout-alert start-50 translate-middle-x"></div>
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="position-fixed z-3 logout-alert start-50 translate-middle-x">
+                    <div class="alert alert-{{ msg.tags }} alert-dismissible" role="alert">
+                        <div>{{ msg }}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
                 aria-labelledby="offcanvasExampleLabel">

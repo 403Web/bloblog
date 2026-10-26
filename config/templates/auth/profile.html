@@ -22,7 +22,11 @@
 {% block content %}
     <section class="mt-5">
         <div class="container">
-            <span class=" fw-bold fs-4 ms-2 mb-4 d-block">Author Profile</span>
+            {% if me %}
+                <span class=" fw-bold fs-4 ms-2 mb-4 d-block">My Profile</span>
+            {% else %}
+                <span class=" fw-bold fs-4 ms-2 mb-4 d-block">Author Profile</span>
+            {% endif %}
             <div class="d-flex align-items-center">
                 <div class="position-relative pfp-div me-5">
                     <img src="{{ data.avatar.url }}" width="200px" class="rounded-circle" alt="">
@@ -33,16 +37,18 @@
                         <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFollowers" aria-controls="offcanvasBottom"><span class="fs-2 fw-semibold d-block">{{ data.followers.count | intword }}</span><span class="fs-4 me-4">Follower</span></button>
                         <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFollowings" aria-controls="offcanvasBottom"><span class="fs-2 fw-semibold d-block me-4">{{ data.followings.count | intword }}</span><span class="fs-4 me-4">Following</span></button>
                     </div>
-                    {% if followed %}
-                    <form method="post" action="{% url 'accounts:follow' pk=data.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn border border-2 border-primary">Unfollow</button>
-                    </form>
-                    {% else %}
-                    <form method="post" action="{% url 'accounts:follow' pk=data.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">Follow</button>
-                    </form>
+                    {% if not me %}
+                        {% if followed %}
+                        <form method="post" action="{% url 'accounts:follow' pk=data.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn border border-2 border-primary">Unfollow</button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{% url 'accounts:follow' pk=data.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Follow</button>
+                        </form>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -51,7 +57,11 @@
     </section>
     <section>
         <div class="container">
-            <span class=" fw-bold fs-4 ms-2 my-3 d-block">{{ data.name }}'s Posts</span>
+            {% if me %}
+                <span class=" fw-bold fs-4 ms-2 my-3 d-block">My Posts</span>
+            {% else %}
+                <span class=" fw-bold fs-4 ms-2 my-3 d-block">{{ data.name }}'s Posts</span>
+            {% endif %}
             <div class="d-flex blogs flex-wrap">
                 {% for post in data.posts.all %}
                     <a href="{% url 'blog:post_detail' pk=post.pk %}" class="card blog border border-1 border-secondary-subtle m-3 p-2 text-decoration-none">

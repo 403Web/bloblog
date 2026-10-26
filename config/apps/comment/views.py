@@ -3,6 +3,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from apps.blog.models import Post
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 from .models import Comment, CommentLike
 from .forms import CommentForm
@@ -33,6 +34,15 @@ class CommentEditView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.kwargs.get('post_pk')})
 
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            'Your comment has been updated successfully.',
+            extra_tags='success'
+        )
+        return super().form_valid(form)
+    
+
 
 class CommentDeleteView(DeleteView):
     model = Comment
@@ -46,6 +56,15 @@ class CommentDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.kwargs.get('post_pk')})
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            'Your comment has been deleted successfully.',
+            extra_tags='success'
+        )
+        return super().form_valid(form)
+    
 
 
 class ReplyCreateView(CreateView):

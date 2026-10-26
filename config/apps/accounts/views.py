@@ -20,6 +20,7 @@ from django.utils.encoding import force_bytes
 from apps.accounts.models import Profile
 from apps.blog.models import Post
 from django.conf import settings
+from django.contrib import messages
 
 from .models import Follow
 from .forms import SignUpForm, PasswordResetForm, ProfileUpdateForm
@@ -96,7 +97,13 @@ class EmailVerificationView(View):
         ):
             user.is_verified = True
             user.save()
-            return redirect(reverse_lazy('core:index')) # TODO: messages
+            login(request, user)
+            messages.success(
+                request,
+                'Your email has been verified successfully.',
+                extra_tags='success'
+            )
+            return redirect(reverse_lazy('core:index'))
         return redirect(reverse_lazy('core:index')) # TODO: messages
 
 
@@ -115,20 +122,39 @@ class ResendVerificationView(View):
 
             return render(request, 'auth/registration/email_sent.html')
 
-        if logged_in:
-            return redirect(reverse_lazy('core:index')) # TODO: messages
+        if not logged_in:
+            return redirect(reverse_lazy('accounts:signin'))
 
-        return redirect(reverse_lazy('accounts:signin'))
+        if logged_in:
+            messages.info(
+                request,
+                'Your account is already verified.',
+                extra_tags='warning'
+            )
+            return redirect(reverse_lazy('core:index'))
 
 
 class SignInView(LoginView):
     redirect_authenticated_user = True
     template_name = 'auth/signin.html'
 
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            'You have signed in successfully. Welcome back!',
+            extra_tags='success'
+        )
+        return super().form_valid(form)
+
 
 class SignOutView(LogoutView):
 
     def get_success_url(self):
+        messages.success(
+            self.request,
+            'You have been signed out successfully.',
+            extra_tags='primary'
+        )
         return reverse_lazy('core:index')
 
 
@@ -138,7 +164,12 @@ class PasswordChangeView(DefaultPasswordChangeView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        return response # TODO: messages
+        messages.success(
+            self.request,
+            'Your password has been changed successfully.',
+            extra_tags='success'
+        )
+        return response
 
 
 class PasswordResetView(DefaultPasswordResetView):
@@ -154,7 +185,12 @@ class PasswordResetConfirmView(DefaultPasswordResetConfirmView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        return response # TODO: messages
+        messages.success(
+            self.request,
+            'Your password has been reset successfully.',
+            extra_tags='success'
+        )
+        return response
 
 
 class ResendPasswordResetView(RedirectView):
@@ -202,6 +238,24 @@ class ProfileView(View):
         return render(request, 'auth/profile.html', context)
 
 
+class ProfilePreview(View):
+
+    def get(self, request, *args, **kwargs):
+            data = request.user.profile
+    
+            context = {
+                'data': data,
+                'me': True,
+                'followed': (
+                    True if Follow.objects.filter(
+                        following=data,
+                        follower=request.user.profile
+                    ).exists() else False
+                ) if request.user.is_authenticated else False
+            }
+            return render(request, 'auth/profile.html', context)
+
+
 class SettingsView(View):
 
     def get(self, request, *args, **kwargs):
@@ -217,6 +271,16 @@ class SettingsView(View):
 
         if form.is_valid():
             form.save()
-            return redirect('accounts:settings') # TODO: messages
+            messages.success(
+                request,
+                'Profile updated successfully.',
+                extra_tags='success'
+            )
+            return redirect('accounts:settings')
 
-        return redirect('accounts:settings') # TODO: messages
+        messages.error(
+            request,
+            'Failed to updated profile. Please try again later.',
+            extra_tags='danger'
+        )
+        return redirect('accounts:settings')

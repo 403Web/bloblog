@@ -4,13 +4,12 @@
 ## TODO
 
 ### Messages
-- [ ] Messages
+- [x] Messages
 
 ### API
 - [ ] Add Swagger
 
 Blog:
-- [x] Add PostView.get_or_create to PostViewSet.retrieve
 - [ ] Add name, avatar and page url to user fields (API)
 
 Accounts:
@@ -21,6 +20,7 @@ Accounts:
 - [ ] Change account and profile info
 
 ### Final Initializations
+- [ ] View permission control
 - [ ] Email threading
 - [ ] Add periodic tasks
 - [ ] Tests

@@ -13,6 +13,7 @@ from .views import (
     ResendPasswordResetView,
     FollowView,
     ProfileView,
+    ProfilePreview,
     SettingsView
 )
 
@@ -44,7 +45,8 @@ urlpatterns = [
     ),
     path('reset-password/resend/', ResendPasswordResetView.as_view(), name='resend_reset_password'),
 
-    path('follow/<pk>/', FollowView.as_view(), name='follow'),
-    path('profile/<pk>/', ProfileView.as_view(), name='profile'),
+    path('follow/<int:pk>/', FollowView.as_view(), name='follow'),
+    path('profile/<int:pk>/', ProfileView.as_view(), name='profile'),
+    path('profile/me/', ProfilePreview.as_view(), name='profile_me'),
     path('settings/', SettingsView.as_view(), name='settings')
 ]
