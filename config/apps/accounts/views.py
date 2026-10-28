@@ -270,6 +270,9 @@ class SettingsView(View):
         )
 
         if form.is_valid():
+            if form.cleaned_data.get('delete_avatar'):
+                form.instance.avatar = 'avatars/default.jpg'
+
             form.save()
             messages.success(
                 request,
@@ -280,7 +283,7 @@ class SettingsView(View):
 
         messages.error(
             request,
-            'Failed to updated profile. Please try again later.',
+            'Failed to update profile. Please try again later.',
             extra_tags='danger'
         )
         return redirect('accounts:settings')

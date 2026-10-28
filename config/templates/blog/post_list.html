@@ -51,49 +51,57 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex blogs flex-wrap">
-                {% for post in posts %}
-                    <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
-                        <a class="text-decoration-none" href="{% url 'blog:post_detail' pk=post.pk %}">
-                            <img src="{{ post.image.url }}" class="img-blog img-thumbnail img-fluid card-img-top" alt="...">
-                            <div class="card-body">
-                                <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
-                                <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                                {{ post.title }}
-                                </p>
-                                <div class="my-3">
-                                <img class="rounded-circle" src="{{ post.author.avatar.url }}" width="36" height="36" alt="">
-                                <span class="small header-inf">{{ post.author.name }}</span>
-                                <span class="small header-inf">{{ post.created_date | naturaltime }}</span>
-                            </div>
-                            </div>
+            {% if posts %}
+                <div class="d-flex blogs flex-wrap">
+                    {% for post in posts %}
+                        <div class="card blog border border-1 border-secondary-subtle m-3 p-2">
+                            <a class="text-decoration-none" href="{% url 'blog:post_detail' pk=post.pk %}">
+                                <img src="{{ post.image.url }}" class="img-blog img-thumbnail img-fluid card-img-top" alt="...">
+                                <div class="card-body">
+                                    <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
+                                    <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
+                                    {{ post.title }}
+                                    </p>
+                                    <div class="my-3">
+                                    <img class="rounded-circle" src="{{ post.author.avatar.url }}" width="36" height="36" alt="">
+                                    <span class="small header-inf">{{ post.author.name }}</span>
+                                    <span class="small header-inf">{{ post.created_date | naturaltime }}</span>
+                                </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="w-100 d-flex justify-content-center mt-4">
+                    <span class="text-secondary">There's nothing to show here!</span>
+                </div>
+            {% endif %}
+        </div>
+        {% if posts %}
+            <div class="d-flex justify-content-center mt-3" aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
                         </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="d-flex justify-content-center mt-3" aria-label="Page navigation example">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page=1" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    </li>
-                {% endif %}
-                {% for num in page_obj.paginator.page_range %}
-                    {% if num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-                        <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        </li>
                     {% endif %}
-                {% endfor %}
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                            <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
     </section>
 {% endblock %}

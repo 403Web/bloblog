@@ -41,6 +41,14 @@ class CommentEditView(UpdateView):
             extra_tags='success'
         )
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            'Invalid form. Please try again.',
+            extra_tags='danger'
+        )
+        return super().form_invalid(form)
     
 
 

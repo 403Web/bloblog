@@ -10,6 +10,7 @@ from django.db.models import Q, Count, Exists, OuterRef
 from apps.comment.models import CommentLike
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 from .models import Post, PostView, PostLike, Category
 from .forms import PostForm
@@ -162,6 +163,22 @@ class PostUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            'Your post has been updated successfully.',
+            extra_tags='success'
+        )
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            'Invalid form. Please try again.',
+            extra_tags='danger'
+        )
+        return super().form_invalid(form)
+
 
 class PostDeleteView(DeleteView):
     model = Post
@@ -174,3 +191,11 @@ class PostDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_list')
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            'Your post has been deleted successfully.',
+            extra_tags='success'
+        )
+        return super().form_valid(form)

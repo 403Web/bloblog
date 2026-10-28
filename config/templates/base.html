@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <!-- links -->
+    <link rel="icon" href="{% static 'imgs/fav.png' %}" type="image/png">
     <link rel="stylesheet" href="{% static 'styles/base.css' %}">
 
     {% block links %}
@@ -233,8 +234,8 @@
                         <span class="mb-4 d-block text-secondary">Get blog articles and offers via email</span>
                         <form method="post" action="{% url 'core:newsletter' %}" class="w-100">
                             {% csrf_token %}
-                            <Input type="email" name="email" placeholder="Your Email" class="form-control border border-1 border-secondary"></Input>
-                            <input type="submit" value="Submit" class="btn btn-primary w-100 mt-3">
+                            <input type="email" name="email" placeholder="Your Email" class="form-control border border-1 border-secondary"></input>
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Submit</button>
                         </form>
                     </div>
                 </div>

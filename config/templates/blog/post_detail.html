@@ -58,7 +58,9 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center">
-                <img src="{{ post.image.url }}" class="mt-4 rounded-2" {% if not post.image.name == 'posts/default.jpg' %}style="max-width: 100%; max-height: 80vh;"{% else %}width="100%" height="600px"{% endif %} alt=""> 
+                <div class="d-flex w-100 justify-content-center">
+                    <img src="{{ post.image.url }}" class="mt-4 rounded-2 header" alt=""> 
+                </div>
             </div>
         </div>
     </header>
@@ -92,110 +94,116 @@
                     </div>
                 </form>
             </div>
-            {% for comment in comments %}
-                <div class="comment mt-3 w-75">
-                    <div class="d-flex Justify-content-between flex-no-wrap">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comment mt-3 w-75">
                         <div class="d-flex Justify-content-between flex-no-wrap">
-                            <div>
-                                <a href="{% url 'accounts:profile' pk=comment.user.pk %}" class="text-dark-emphasis text-decoration-none">
-                                    <img src="{{ comment.user.avatar.url }}" width="40px" class="rounded-circle me-2" alt="">
-                                </a>
-                                <a href="{% url 'accounts:profile' pk=comment.user.pk %}" class="fw-semibold me-1 text-dark-emphasis text-decoration-none">{{ comment.user.name }}</a>
-                                <span class="small text-secondary">{{ comment.created_date | naturaltime }}</span>
-                            </div>
-                            {% if comment.user == request.user.profile %}
-                                <button type="button" class="d-inline btn delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=comment.pk %}">
-                                    <i class="bi bi-trash3 text-danger"></i>
-                                </button>
-                                <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ comment.id }}" data-comment-text="{{ comment.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="my-3 text-dark-subtle">
-                        <p>{{ comment.content }}</p>
-                    </div>
-                    <div>
-                        <div class="d-flex align-items-center">
-                            <div class="d-flex align-items-center">
-                                <form method="post" action="{% url 'comment:comment_like' post_pk=post.pk comment_pk=comment.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" id="TUbtn" class="{% if comment.liked_by_user %}text-primary{% else %}text-light-emphasis{% endif %} btn border-0 fs-5">
-                                        <i class="bi bi-hand-thumbs-up"></i>
+                            <div class="d-flex Justify-content-between flex-no-wrap">
+                                <div>
+                                    <a href="{% url 'accounts:profile' pk=comment.user.pk %}" class="text-dark-emphasis text-decoration-none">
+                                        <img src="{{ comment.user.avatar.url }}" width="40px" class="rounded-circle me-2" alt="">
+                                    </a>
+                                    <a href="{% url 'accounts:profile' pk=comment.user.pk %}" class="fw-semibold me-1 text-dark-emphasis text-decoration-none">{{ comment.user.name }}</a>
+                                    <span class="small text-secondary">{{ comment.created_date | naturaltime }}</span>
+                                </div>
+                                {% if comment.user == request.user.profile %}
+                                    <button type="button" class="d-inline btn delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=comment.pk %}">
+                                        <i class="bi bi-trash3 text-danger"></i>
                                     </button>
-                                </form>
-                                <span class="me-1">{{ comment.likes.count }}</span>
-                            </div>
-                            <div class="mx-4">
-                                <button type="button" class="reply-btn btn border-0" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ comment.pk }}">
-                                    <i class="bi bi-chat-dots"></i>
-                                    <span>reply</span>
-                                </button>
+                                    <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ comment.id }}" data-comment-text="{{ comment.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
+                                {% endif %}
                             </div>
                         </div>
-                        <form method="post" action="{% url 'comment:reply_create' post_pk=post.pk parent_pk=comment.pk %}">
-                            {% csrf_token %}
-                            <div class="collapse w-75 mt-1 input-group" id="replycollapse{{ comment.pk }}">
-                                <input name="content" class="form-control" placeholder="Leave a reply here">
-                                <button type="submit" class="input-group-text" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ comment.pk }}"><i class="bi bi-send"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                    {% if comment.replies %}
-                        {% get_all_replies comment as replies %}
-                        {% for reply in replies %}
-                            <div class="reply ms-4 w-75 mt-2">
-                                <div class="d-flex Justify-content-between flex-no-wrap">
-                                    <div class="d-flex Justify-content-between flex-no-wrap">
-                                        <div>
-                                            <a href="{% url 'accounts:profile' pk=reply.user.pk %}" class="text-dark-emphasis text-decoration-none">
-                                                <img src="{{ reply.user.avatar.url }}" width="30px" class="rounded-circle me-2" alt="">
-                                            </a>
-                                            <a href="{% url 'accounts:profile' pk=reply.user.pk %}" class="fw-semibold me-1 small text-dark-emphasis text-decoration-none">{{ reply.user.name }}</a>
-                                            <span class="small text-secondary">{{ reply.created_date | naturaltime }}</span>
-                                        </div>
-                                        {% if reply.user == request.user.profile %}
-                                            <button type="button" class="d-inline btn me-1 delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=reply.pk %}">
-                                                <i class="bi bi-trash3 text-danger"></i>
-                                            </button>
-                                            <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ reply.id }}" data-comment-text="{{ reply.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="my-3 ms-4 text-dark-subtle">
-                                <p>{{ reply.content }}</p>
-                            </div>
-                            <div class="ms-3">
+                        <div class="my-3 text-dark-subtle">
+                            <p>{{ comment.content }}</p>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <form method="post" action="{% url 'comment:comment_like' post_pk=post.pk comment_pk=reply.pk %}">
-                                            {% csrf_token %}
-                                            <button type="submit" id="TUbtn" class="{% if reply.liked_by_user %}text-primary{% else %}text-light-emphasis{% endif %} btn border-0 fs-5">
-                                                <i class="bi bi-hand-thumbs-up"></i>
-                                            </button>
-                                        </form>
-                                        <span class="me-1">{{ reply.likes.count }}</span>
-                                    </div>
-                                    <div class="mx-4">
-                                        <button type="button" class="reply-btn btn border-0" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ reply.pk }}">
-                                            <i class="bi bi-chat-dots"></i>
-                                            <span>reply</span>
+                                    <form method="post" action="{% url 'comment:comment_like' post_pk=post.pk comment_pk=comment.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" id="TUbtn" class="{% if comment.liked_by_user %}text-primary{% else %}text-light-emphasis{% endif %} btn border-0 fs-5">
+                                            <i class="bi bi-hand-thumbs-up"></i>
                                         </button>
+                                    </form>
+                                    <span class="me-1">{{ comment.likes.count }}</span>
+                                </div>
+                                <div class="mx-4">
+                                    <button type="button" class="reply-btn btn border-0" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ comment.pk }}">
+                                        <i class="bi bi-chat-dots"></i>
+                                        <span>reply</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <form method="post" action="{% url 'comment:reply_create' post_pk=post.pk parent_pk=comment.pk %}">
+                                {% csrf_token %}
+                                <div class="collapse w-75 mt-1 input-group" id="replycollapse{{ comment.pk }}">
+                                    <input name="content" class="form-control" placeholder="Leave a reply here">
+                                    <button type="submit" class="input-group-text" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ comment.pk }}"><i class="bi bi-send"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        {% if comment.replies %}
+                            {% get_all_replies comment as replies %}
+                            {% for reply in replies %}
+                                <div class="reply ms-4 w-75 mt-2">
+                                    <div class="d-flex Justify-content-between flex-no-wrap">
+                                        <div class="d-flex Justify-content-between flex-no-wrap">
+                                            <div>
+                                                <a href="{% url 'accounts:profile' pk=reply.user.pk %}" class="text-dark-emphasis text-decoration-none">
+                                                    <img src="{{ reply.user.avatar.url }}" width="30px" class="rounded-circle me-2" alt="">
+                                                </a>
+                                                <a href="{% url 'accounts:profile' pk=reply.user.pk %}" class="fw-semibold me-1 small text-dark-emphasis text-decoration-none">{{ reply.user.name }}</a>
+                                                <span class="small text-secondary">{{ reply.created_date | naturaltime }}</span>
+                                            </div>
+                                            {% if reply.user == request.user.profile %}
+                                                <button type="button" class="d-inline btn me-1 delete-comment-btn" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-delete-url="{% url 'comment:comment_delete' post_pk=post.pk comment_pk=reply.pk %}">
+                                                    <i class="bi bi-trash3 text-danger"></i>
+                                                </button>
+                                                <button class="btn" type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" data-post-id="{{ post.id }}" data-comment-id="{{ reply.id }}" data-comment-text="{{ reply.content }}" aria-controls="offcanvasBottom"><i class="bi bi-pencil-square"></i></button>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                                <form method="post" action="{% url 'comment:reply_create' post_pk=post.pk parent_pk=reply.pk %}">
-                                    {% csrf_token %}
-                                    <div class="collapse w-75 mt-1 input-group" id="replycollapse{{ reply.pk }}">
-                                        <input name="content" class="form-control" placeholder="Leave a reply here">
-                                        <button type="submit" class="input-group-text" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ reply.pk }}"><i class="bi bi-send"></i></button>
+                                <div class="my-3 ms-4 text-dark-subtle">
+                                    <p>{{ reply.content }}</p>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <form method="post" action="{% url 'comment:comment_like' post_pk=post.pk comment_pk=reply.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" id="TUbtn" class="{% if reply.liked_by_user %}text-primary{% else %}text-light-emphasis{% endif %} btn border-0 fs-5">
+                                                    <i class="bi bi-hand-thumbs-up"></i>
+                                                </button>
+                                            </form>
+                                            <span class="me-1">{{ reply.likes.count }}</span>
+                                        </div>
+                                        <div class="mx-4">
+                                            <button type="button" class="reply-btn btn border-0" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ reply.pk }}">
+                                                <i class="bi bi-chat-dots"></i>
+                                                <span>reply</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <hr class="w-75 border border-1 border-secondary-subtle opacity-25">
+                                    <form method="post" action="{% url 'comment:reply_create' post_pk=post.pk parent_pk=reply.pk %}">
+                                        {% csrf_token %}
+                                        <div class="collapse w-75 mt-1 input-group" id="replycollapse{{ reply.pk }}">
+                                            <input name="content" class="form-control" placeholder="Leave a reply here">
+                                            <button type="submit" class="input-group-text" data-bs-toggle="collapse" data-bs-target="#replycollapse{{ reply.pk }}"><i class="bi bi-send"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <hr class="w-75 border border-1 border-secondary-subtle opacity-25">
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="w-100 d-flex justify-content-center mt-4">
+                    <span class="text-secondary">There's nothing to show here!</span>
                 </div>
-            {% endfor %}
+            {% endif %}
         </div>
     </section>
     <!-- Modal -->

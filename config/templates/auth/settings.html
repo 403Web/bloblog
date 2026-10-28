@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}BlobLog | Profile{% endblock %}
+{% block title %}BlobLog | Settings{% endblock %}
 
 {% block links %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -27,6 +27,8 @@
                 <div class="d-flex align-items-center">
                     <div class="position-relative pfp-div me-5">
                         <img src="{{ request.user.profile.avatar.url }}" id="previewImage" width="200px" class="rounded-circle" alt="">
+                        <button type="button" class="btn" id="ImageDelete"><i class="bi d-flex justify-content-center align-items-center bi-trash3 text-danger position-absolute translate-middle rounded-circle bg-secondary-subtle fs-3 pfp-delete"></i></button>
+                        <input type="hidden" name="delete_avatar" id="DeleteAvatar" value="false">
                         <label for="ImageUpload"><i class="bi d-flex justify-content-center align-items-center bi-pencil position-absolute translate-middle rounded-circle bg-secondary-subtle fs-3 pfp-edit"></i></label>
                         <input name="avatar" type="file" accept="image/*" class="d-none" id="ImageUpload" name="">
                     </div>

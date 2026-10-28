@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 User = get_user_model()
@@ -21,6 +22,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.author.user.email
+
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', kwargs={'pk': self.pk})
+    
 
     def get_snippet(self):
         return self.content[:65] if len(self.content) >= 65 else self.content

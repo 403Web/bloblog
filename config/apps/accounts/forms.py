@@ -29,7 +29,8 @@ class PasswordResetForm(DefaultPasswordResetForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
+    delete_avatar = forms.BooleanField(required=False)
 
     class Meta:
         model = Profile
-        fields = ['name', 'avatar']
+        fields = ['name', 'avatar', 'delete_avatar']
