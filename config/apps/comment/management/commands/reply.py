@@ -21,7 +21,10 @@ class Command(BaseCommand):
         parser.add_argument('-t', '--timeout', type=int, default=3)
 
     def check_dependencies(self):
-        comments = Comment.objects.all()
+        ids = list(Comment.objects.values_list('pk', flat=True))
+        comments_ids = random.sample(ids, k=min(20, len(ids)))
+        comments = [Comment.objects.get(pk=id) for id in comments_ids]
+
         if not comments:
             self.stdout.write(
                 self.style.ERROR(
@@ -37,42 +40,41 @@ class Command(BaseCommand):
         return user_creator.handle_user_create(timeout)
 
     def handle_reply_create(self, comments, profile_obj):
-        reply_count = 0
+        replies = []
 
         for comment in comments:
 
             if comment.user == profile_obj:
-                if random.choice((True, False, False, False, False, False)):
+                if random.choice((True, False)):
                     self.stdout.write(
                     f'Creating Comment (reply) object for comment with id {comment.pk}...',
                     ending=''
                 )
-                    Comment.objects.create(
+                    reply = Comment.objects.create(
                         post=comment.post,
                         parent=comment,
                         user=profile_obj,
                         content=self.fake.text()
                     )
                     self.stdout.write(self.style.SUCCESS(' DONE'))
-                    reply_count += 1
+                    replies += [reply]
 
                     continue
 
-            if random.choice((True, False)):
-                self.stdout.write(
-                    f'Creating Comment (reply) object for comment with id {comment.pk}...',
-                    ending=''
-                )
-                Comment.objects.create(
-                    post=comment.post,
-                    parent=comment,
-                    user=profile_obj,
-                    content=self.fake.text()
-                )
-                self.stdout.write(self.style.SUCCESS(' DONE'))
-                reply_count += 1
+            self.stdout.write(
+                f'Creating Comment (reply) object for comment with id {comment.pk}...',
+                ending=''
+            )
+            reply = Comment.objects.create(
+                post=comment.post,
+                parent=comment,
+                user=profile_obj,
+                content=self.fake.text()
+            )
+            self.stdout.write(self.style.SUCCESS(' DONE'))
+            replies += [reply]
 
-        return reply_count
+        return replies
 
     def handle(self, *args, **options):
         result = ' RESULT '
@@ -103,14 +105,14 @@ class Command(BaseCommand):
         self.stdout.write((' ' * 6) + stg2)
         self.stdout.write('=' * (len(stg2) + (6 * 2)))
         self.stdout.write('\n')
-        reply_count = self.handle_reply_create(
+        replies = self.handle_reply_create(
             comments=comments,
             profile_obj=profile_obj
         )
 
         self.stdout.write('\n')
-        match reply_count:
-            case 0:
+        match replies:
+            case []:
                 msg = 'NO COMMENT (REPLY) OBJECT CREATED.'
                 self.stdout.write(
                     '=' * (
@@ -126,14 +128,14 @@ class Command(BaseCommand):
 
                 self.stdout.write(
                     '=' * (
-                        len(str(reply_count)) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
+                        len(str(len(replies))) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
                     ) + result + '=' * (
                         math.ceil(len(msg) / 2) - math.ceil(len(result) / 2)
                     )
                 )
-                self.stdout.write(str(reply_count) + msg)
+                self.stdout.write(str(len(replies)) + msg)
                 self.stdout.write(
                     '=' * (
-                        len(str(reply_count)) + len(msg)
+                        len(str(len(replies))) + len(msg)
                     )
                 )

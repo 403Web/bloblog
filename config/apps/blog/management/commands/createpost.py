@@ -51,7 +51,7 @@ class Command(BaseCommand):
         return user_creator.handle_user_create(timeout)
 
     def handle_post_create(self, count, timeout, profile_obj):
-        post_count = 0
+        posts = []
 
         for idx in range(count):
             ratio = random.choice(RATIOS)
@@ -106,10 +106,10 @@ class Command(BaseCommand):
                     ending=''
                 )
 
-            post_count += 1
+            posts += [post]
             self.stdout.write(self.style.SUCCESS(' DONE'))
 
-        return post_count
+        return posts
 
     def handle(self, *args, **options):
         result = ' RESULT '
@@ -140,7 +140,7 @@ class Command(BaseCommand):
         self.stdout.write((' ' * 6) + stg2)
         self.stdout.write('=' * (len(stg2) + (6 * 2)))
         self.stdout.write('\n')
-        post_count = self.handle_post_create(
+        posts = self.handle_post_create(
             count=options.get('count'),
             timeout=options.get('timeout'),
             profile_obj=profile_obj
@@ -150,14 +150,14 @@ class Command(BaseCommand):
         self.stdout.write('\n')
         self.stdout.write(
             '=' * (
-                len(str(post_count)) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
+                len(str(len(posts))) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
             ) + result + '=' * (
                 math.ceil(len(msg) / 2) - math.ceil(len(result) / 2)
             )
         )
-        self.stdout.write(str(post_count) + msg)
+        self.stdout.write(str(len(posts)) + msg)
         self.stdout.write(
             '=' * (
-                len(str(post_count)) + len(msg)
+                len(str(len(posts))) + len(msg)
             )
         )

@@ -17,7 +17,10 @@ class Command(BaseCommand):
         parser.add_argument('-t', '--timeout', type=int, default=3)
 
     def check_dependencies(self):
-        posts = Post.objects.all()
+        ids = list(Post.objects.values_list('pk', flat=True))
+        posts_ids = random.sample(ids, k=min(10, len(ids)))
+        posts = [Post.objects.get(pk=id) for id in posts_ids]
+
         if not posts:
             self.stdout.write(
                 self.style.ERROR(
@@ -38,7 +41,7 @@ class Command(BaseCommand):
         for post in posts:
 
             if post.author == profile_obj:
-                if random.choice((True, False, False, False)):
+                if random.choice((True, False)):
                     self.stdout.write(
                     f'Creating PostLike object for post with id {post.pk}...',
                     ending=''
@@ -56,21 +59,20 @@ class Command(BaseCommand):
 
                     continue
 
-            if random.choice((True, False)):
-                self.stdout.write(
-                    f'Creating PostLike object for post with id {post.pk}...',
-                    ending=''
+            self.stdout.write(
+                f'Creating PostLike object for post with id {post.pk}...',
+                ending=''
+            )
+            try:
+                PostLike.objects.create(
+                    post=post, user=profile_obj
                 )
-                try:
-                    PostLike.objects.create(
-                        post=post, user=profile_obj
-                    )
-                    self.stdout.write(self.style.SUCCESS(' DONE'))
-                    post_like_count += 1
-                except IntegrityError:
-                    self.stdout.write(self.style.WARNING(
-                        'Unique constraint failed, SKIPPING'
-                    ))
+                self.stdout.write(self.style.SUCCESS(' DONE'))
+                post_like_count += 1
+            except IntegrityError:
+                self.stdout.write(self.style.WARNING(
+                    'Unique constraint failed, SKIPPING'
+                ))
 
         return post_like_count
 

@@ -17,7 +17,10 @@ class Command(BaseCommand):
         parser.add_argument('-t', '--timeout', type=int, default=3)
 
     def check_dependencies(self):
-        comments = Comment.objects.all()
+        ids = list(Comment.objects.values_list('pk', flat=True))
+        comments_ids = random.sample(ids, k=min(20, len(ids)))
+        comments = [Comment.objects.get(pk=id) for id in comments_ids]
+
         if not comments:
             self.stdout.write(
                 self.style.ERROR(
@@ -38,7 +41,7 @@ class Command(BaseCommand):
         for comment in comments:
 
             if comment.user == profile_obj:
-                if random.choice((True, False, False, False, False, False)):
+                if random.choice((True, False)):
                     self.stdout.write(
                     f'Creating CommentLike object for comment with id {comment.pk}...',
                     ending=''
@@ -56,21 +59,20 @@ class Command(BaseCommand):
 
                     continue
 
-            if random.choice((True, False)):
-                self.stdout.write(
-                    f'Creating CommentLike object for comment with id {comment.pk}...',
-                    ending=''
+            self.stdout.write(
+                f'Creating CommentLike object for comment with id {comment.pk}...',
+                ending=''
+            )
+            try:
+                CommentLike.objects.create(
+                    comment=comment, user=profile_obj
                 )
-                try:
-                    CommentLike.objects.create(
-                        comment=comment, user=profile_obj
-                    )
-                    self.stdout.write(self.style.SUCCESS(' DONE'))
-                    comment_like_count += 1
-                except IntegrityError:
-                    self.stdout.write(self.style.WARNING(
-                        'Unique constraint failed, SKIPPING'
-                    ))
+                self.stdout.write(self.style.SUCCESS(' DONE'))
+                comment_like_count += 1
+            except IntegrityError:
+                self.stdout.write(self.style.WARNING(
+                    'Unique constraint failed, SKIPPING'
+                ))
 
         return comment_like_count
 

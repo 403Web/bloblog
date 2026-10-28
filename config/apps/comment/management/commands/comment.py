@@ -22,7 +22,10 @@ class Command(BaseCommand):
         parser.add_argument('-t', '--timeout', type=int, default=3)
 
     def check_dependencies(self):
-        posts = Post.objects.all()
+        ids = list(Post.objects.values_list('pk', flat=True))
+        posts_ids = random.sample(ids, k=min(20, len(ids)))
+        posts = [Post.objects.get(pk=id) for id in posts_ids]
+
         if not posts:
             self.stdout.write(
                 self.style.ERROR(
@@ -38,40 +41,39 @@ class Command(BaseCommand):
         return user_creator.handle_user_create(timeout)
 
     def handle_comment_create(self, posts, profile_obj):
-        comment_count = 0
+        comments = []
 
         for post in posts:
 
             if post.author == profile_obj:
-                if random.choice((True, False, False, False, False, False)):
+                if random.choice((True, False)):
                     self.stdout.write(
                     f'Creating Comment object for post with id {post.pk}...',
                     ending=''
                 )
-                    Comment.objects.create(
+                    comment = Comment.objects.create(
                         post=post,
                         user=profile_obj,
                         content=self.fake.text()
                     )
                     self.stdout.write(self.style.SUCCESS(' DONE'))
-                    comment_count += 1
+                    comments += [comment]
 
                     continue
 
-            if random.choice((True, False)):
-                self.stdout.write(
-                    f'Creating Comment object for post with id {post.pk}...',
-                    ending=''
-                )
-                Comment.objects.create(
-                    post=post,
-                    user=profile_obj,
-                    content=self.fake.text()
-                )
-                self.stdout.write(self.style.SUCCESS(' DONE'))
-                comment_count += 1
+            self.stdout.write(
+                f'Creating Comment object for post with id {post.pk}...',
+                ending=''
+            )
+            comment = Comment.objects.create(
+                post=post,
+                user=profile_obj,
+                content=self.fake.text()
+            )
+            self.stdout.write(self.style.SUCCESS(' DONE'))
+            comments += [comment]
 
-        return comment_count
+        return comments
 
     def handle(self, *args, **options):
         result = ' RESULT '
@@ -102,14 +104,14 @@ class Command(BaseCommand):
         self.stdout.write((' ' * 6) + stg2)
         self.stdout.write('=' * (len(stg2) + (6 * 2)))
         self.stdout.write('\n')
-        comment_count = self.handle_comment_create(
+        comments = self.handle_comment_create(
             posts=posts,
             profile_obj=profile_obj
         )
 
         self.stdout.write('\n')
-        match comment_count:
-            case 0:
+        match comments:
+            case []:
                 msg = 'NO COMMENT OBJECT CREATED.'
                 self.stdout.write(
                     '=' * (
@@ -125,14 +127,14 @@ class Command(BaseCommand):
 
                 self.stdout.write(
                     '=' * (
-                        len(str(comment_count)) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
+                        len(str(len(comments))) + math.ceil(len(msg) / 2) - math.ceil(len(result) / 2) - 1
                     ) + result + '=' * (
                         math.ceil(len(msg) / 2) - math.ceil(len(result) / 2)
                     )
                 )
-                self.stdout.write(str(comment_count) + msg)
+                self.stdout.write(str(len(comments)) + msg)
                 self.stdout.write(
                     '=' * (
-                        len(str(comment_count)) + len(msg)
+                        len(str(len(comments))) + len(msg)
                     )
                 )

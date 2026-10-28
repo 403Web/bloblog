@@ -28,7 +28,9 @@ class Command(BaseCommand):
         self.stdout.write('Creating new user object...', ending='')
         try:
             user_obj = get_user_model().objects.create_user(
-                email=self.fake.email(), password='a/@234a/?'
+                email=self.fake.email(),
+                username=self.fake.user_name(),
+                password='a/@234a/?'
             )
         except IntegrityError:
             self.stdout.write(self.style.WARNING(
