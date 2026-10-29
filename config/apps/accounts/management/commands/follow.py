@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from apps.accounts.management.commands.createuser import Command as UserCreateCommand
 from django.db import IntegrityError
+from django.conf import settings
 import math
 import random
 
@@ -40,20 +41,22 @@ class Command(BaseCommand):
 
         for profile in profiles:
 
-            self.stdout.write(
-                f'Creating Follow object for User (Profile) with id {profile.pk}...',
-                ending=''
-            )
-            try:
-                Follow.objects.create(
-                    following=profile, follower=profile_obj
+            if profile.user.email != settings.DELETED_USER_EMAIL:
+
+                self.stdout.write(
+                    f'Creating Follow object for User (Profile) with id {profile.pk}...',
+                    ending=''
                 )
-                self.stdout.write(self.style.SUCCESS(' DONE'))
-                follows_count += 1
-            except IntegrityError:
-                self.stdout.write(self.style.WARNING(
-                    'Unique constraint failed, SKIPPING'
-                ))
+                try:
+                    Follow.objects.create(
+                        following=profile, follower=profile_obj
+                    )
+                    self.stdout.write(self.style.SUCCESS(' DONE'))
+                    follows_count += 1
+                except IntegrityError:
+                    self.stdout.write(self.style.WARNING(
+                        'Unique constraint failed, SKIPPING'
+                    ))
 
         return follows_count
 

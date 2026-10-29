@@ -35,11 +35,11 @@ class Command(BaseCommand):
         reply_creator = ReplyCreateCommand()
         comment_like_creator = CommentLikeCreateCommand()
         follows_count = 0
-        posts = []
+        posts_count = 0
         post_like_count = 0
         post_view_count = 0
-        comments = []
-        replies = []
+        comments_count = 0
+        replies_count = 0
         comment_like_count = 0
 
         dependencies = post_creator.check_dependencies()
@@ -71,9 +71,7 @@ class Command(BaseCommand):
             self.stdout.write('\n')
             _, profile_obj = user_creator.handle_user_create(options.get('timeout'))
 
-            ids = list(Profile.objects.values_list('pk', flat=True))
-            profiles_ids = random.sample(ids, k=min(10, len(ids)))
-            profiles = [Profile.objects.get(pk=id) for id in profiles_ids]
+            profiles = follow_creator.check_dependencies()
 
             stg2 = 'STAGE 2: GENERATE FOLLOW OBJECTS'
             self.stdout.write('\n')
@@ -98,7 +96,7 @@ class Command(BaseCommand):
                 profile_obj=profile_obj
             )
 
-            posts = posts_in_iteration
+            posts = post_like_creator.check_dependencies()
 
             stg4 = 'STAGE 4: GENERATE POSTLIKE OBJECTS'
             self.stdout.write('\n')
@@ -111,6 +109,8 @@ class Command(BaseCommand):
                 profile_obj=profile_obj
             )
 
+            posts = post_view_creator.check_dependencies()
+
             stg5 = 'STAGE 5: GENERATE POSTVIEW OBJECTS'
             self.stdout.write('\n')
             self.stdout.write('=' * (len(stg5) + (6 * 2)))
@@ -121,6 +121,8 @@ class Command(BaseCommand):
                 posts=posts,
                 profile_obj=profile_obj
             )
+
+            posts = comment_creator.check_dependencies()
 
             stg6 = 'STAGE 6: GENERATE COMMENT OBJECTS'
             self.stdout.write('\n')
@@ -133,7 +135,7 @@ class Command(BaseCommand):
                 profile_obj=profile_obj
             )
 
-            comments = comments_in_iteration
+            comments = reply_creator.check_dependencies()
 
             stg7 = 'STAGE 7: GENERATE COMMENT (REPLY) OBJECTS'
             self.stdout.write('\n')
@@ -158,11 +160,11 @@ class Command(BaseCommand):
             )
 
             follows_count += follows_in_iteration
-            posts += [posts_in_iteration]
+            posts_count += len(posts_in_iteration)
             post_like_count += post_likes_in_iteration
             post_view_count += post_views_in_iteration
-            comments += [comments_in_iteration]
-            replies += [replies_in_iteration]
+            comments_count += len(comments_in_iteration)
+            replies_count += len(replies_in_iteration)
             comment_like_count += comment_likes_in_iteration
 
         longest = lambda a, b, c, d, e, f, g: max(a, b, c, d, e, f, g, key=len)
@@ -182,11 +184,11 @@ class Command(BaseCommand):
                 len(str(
                     biggest(
                         follows_count,
-                        len(posts),
+                        posts_count,
                         post_like_count,
                         post_view_count,
-                        len(comments),
-                        len(replies),
+                        comments_count,
+                        replies_count,
                         comment_like_count
                     )
                 )) + math.ceil(len(
@@ -219,8 +221,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(str(follows_count) + follow_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO FOLLOW OBJECT CREATED.'))
-        if len(posts) != 0:
-            self.stdout.write(self.style.SUCCESS(str(len(posts)) + post_msg))
+        if posts_count != 0:
+            self.stdout.write(self.style.SUCCESS(str(posts_count) + post_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO POST OBJECT CREATED.'))
         if post_like_count != 0:
@@ -231,12 +233,12 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(str(post_view_count) + post_view_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO POSTVIEW OBJECT CREATED.'))
-        if len(comments) != 0:
-            self.stdout.write(self.style.SUCCESS(str(len(comments)) + comment_msg))
+        if comments_count != 0:
+            self.stdout.write(self.style.SUCCESS(str(comments_count) + comment_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO COMMENT OBJECT CREATED.'))
-        if len(replies) != 0:
-            self.stdout.write(self.style.SUCCESS(str(len(replies)) + reply_msg))
+        if replies_count != 0:
+            self.stdout.write(self.style.SUCCESS(str(replies_count) + reply_msg))
         else:
             self.stdout.write(self.style.SUCCESS('NO COMMENT (REPLY) OBJECT CREATED.'))
         if comment_like_count != 0:
@@ -250,11 +252,11 @@ class Command(BaseCommand):
                 len(str(
                     biggest(
                         follows_count,
-                        len(posts),
+                        posts_count,
                         post_like_count,
                         post_view_count,
-                        len(comments),
-                        len(replies),
+                        comments_count,
+                        replies_count,
                         comment_like_count
                     )
                 )) + len(
