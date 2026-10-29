@@ -57,7 +57,7 @@ class Command(BaseCommand):
             ratio = random.choice(RATIOS)
             width = random.randint(600, 1200)
             height = int(width * (ratio[1] / ratio[0]))
-            url = f'https://loremflickr.com/{width}/{height}'
+            url = f'https://cataas.com/cat?width={width}&height={height}'
 
             self.stdout.write(
                 f'Creating {idx + 1} post(s) for user "{profile_obj.name}"...',
