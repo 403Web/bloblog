@@ -1,5 +1,5 @@
 from django import template
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Value, BooleanField
 from django_cte import CTE, with_cte
 
 from ..models import Comment, CommentLike
@@ -22,12 +22,14 @@ def get_all_replies(context, comment):
         select=cte.join(
             Comment, pk=cte.col.pk
         ).exclude(pk=comment.pk).annotate(
-            liked_by_user=Exists(
-                CommentLike.objects.filter(
-                    user=context.get('request').user.profile,
-                    comment=OuterRef('pk')
+            liked_by_user=(
+                Exists(
+                    CommentLike.objects.filter(
+                        user=context.get('request').user.profile,
+                        comment=OuterRef('pk')
+                    )
                 )
-            )
+            ) if context.get('request').user.is_authenticated else Value(False, output_field=BooleanField())
         )
     )
 

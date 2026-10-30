@@ -161,5 +161,6 @@ REST_FRAMEWORK = {
 # uploads
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024 # 10MiB
 
-# redirect authenticated users
+# authentication urls
+LOGIN_URL = '/accounts/signin'
 LOGIN_REDIRECT_URL = '/'

@@ -62,24 +62,32 @@
             {% else %}
                 <span class=" fw-bold fs-4 ms-2 my-3 d-block">{{ data.name }}'s Posts</span>
             {% endif %}
-            <div class="d-flex blogs flex-wrap">
-                {% for post in data.posts.all %}
-                    <a href="{% url 'blog:post_detail' pk=post.pk %}" class="card blog border border-1 border-secondary-subtle m-3 p-2 text-decoration-none">
-                        <img src="{{ post.image.url }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
-                            <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
-                            {{ post.title | truncatechars:62 }}
-                            </p>
-                            <div class="my-3">
-                            <img src="{{ post.author.avatar.url }}" class="rounded-circle" width="36" height="36" alt="">
-                            <span class="small header-inf">{{ post.author.name }}</span>
-                            <span class="small header-inf">{{ post.created_date | date:'M d, Y' }}</span>
-                        </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
+            {% with data.posts.all as posts %}
+                {% if posts %}
+                <div class="d-flex blogs flex-wrap">
+                    {% for post in data.posts.all %}
+                        <a href="{% url 'blog:post_detail' pk=post.pk %}" class="card blog border border-1 border-secondary-subtle m-3 p-2 text-decoration-none">
+                            <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="badge text-bg-primary fw-light my-2">{{ post.category.name }}</div>
+                                <p class="text-dark-emphasis my-2 fs-5 fw-bold card-text">
+                                {{ post.title | truncatechars:62 }}
+                                </p>
+                                <div class="my-3">
+                                <img src="{{ post.author.avatar.url }}" class="rounded-circle" width="36" height="36" alt="">
+                                <span class="small header-inf">{{ post.author.name }}</span>
+                                <span class="small header-inf">{{ post.created_date | date:'M d, Y' }}</span>
+                            </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="w-100 d-flex justify-content-center mt-4">
+                    <span class="text-secondary">There's nothing to show here!</span>
+                </div>
+            {% endif %}
+        {% endwith %}
         </div>
     </section>
     <div class="offcanvas h-50 offcanvas-bottom" tabindex="-1" id="offcanvasFollowings" aria-labelledby="offcanvasBottomLabel">

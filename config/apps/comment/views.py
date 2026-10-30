@@ -1,15 +1,17 @@
 from django.views.generic.base import View
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.blog.models import Post
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 
+from ..utilities.mixins import VerificationRequiredMixin
 from .models import Comment, CommentLike
 from .forms import CommentForm
 
 
-class CommentCreateView(CreateView):
+class CommentCreateView(LoginRequiredMixin, VerificationRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
 
@@ -24,7 +26,7 @@ class CommentCreateView(CreateView):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.kwargs.get('post_pk')})
 
 
-class CommentEditView(UpdateView):
+class CommentEditView(LoginRequiredMixin, VerificationRequiredMixin, UpdateView):
     model = Comment
     pk_url_kwarg = 'comment_pk'
     form_class = CommentForm
@@ -52,7 +54,7 @@ class CommentEditView(UpdateView):
     
 
 
-class CommentDeleteView(DeleteView):
+class CommentDeleteView(LoginRequiredMixin, VerificationRequiredMixin, DeleteView):
     model = Comment
     pk_url_kwarg = 'comment_pk'
 
@@ -75,7 +77,7 @@ class CommentDeleteView(DeleteView):
     
 
 
-class ReplyCreateView(CreateView):
+class ReplyCreateView(LoginRequiredMixin, VerificationRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
 
@@ -92,7 +94,7 @@ class ReplyCreateView(CreateView):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.kwargs.get('post_pk')})
 
 
-class CommentLikeView(View):
+class CommentLikeView(LoginRequiredMixin, View):
     def post(self, request, post_pk, comment_pk):
         comment = Comment.objects.get(pk=comment_pk)
 

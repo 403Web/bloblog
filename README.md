@@ -20,7 +20,7 @@ Accounts:
 - [ ] Change account and profile info
 
 ### Final Initializations
-- [ ] View permission control
+- [x] View permission control
 - [ ] Email threading
 - [ ] Add periodic tasks
 - [ ] Tests

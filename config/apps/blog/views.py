@@ -6,12 +6,14 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.db.models import Q, Count, Exists, OuterRef
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q, Count, Exists, OuterRef, Value, BooleanField
 from apps.comment.models import CommentLike
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 
+from ..utilities.mixins import VerificationRequiredMixin
 from .models import Post, PostView, PostLike, Category
 from .forms import PostForm
 
@@ -73,12 +75,15 @@ class PostRetrieveView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user_is_authenticated = self.request.user.is_authenticated
 
         # POST LIKE
-        post_liked_by_user = PostLike.objects.filter(
-            user=self.request.user.profile,
-            post=self.get_object()
-        ).exists()
+        post_liked_by_user = (
+            PostLike.objects.filter(
+                user=self.request.user.profile,
+                post=self.get_object()
+            ).exists() if user_is_authenticated else False
+        )
 
         # COMMENT ORDERING
         SORTS = {
@@ -98,10 +103,12 @@ class PostRetrieveView(DetailView):
 
         # COMMENT LIKE
         comments = comments.annotate(
-            liked_by_user=Exists(CommentLike.objects.filter(
-                user=self.request.user.profile,
-                comment=OuterRef('pk')
-            ))
+            liked_by_user=(
+                Exists(CommentLike.objects.filter(
+                    user=self.request.user.profile,
+                    comment=OuterRef('pk')
+                )) if user_is_authenticated else Value(False, output_field=BooleanField())
+            )
         )
 
         context.update({
@@ -114,7 +121,10 @@ class PostRetrieveView(DetailView):
     def get(self, request, *args, **kwargs):
         post = self.get_object()
 
-        if self.request.user.profile != post.author:
+        if (
+            request.user.is_authenticated and
+            request.user.profile != post.author
+        ):
             PostView.objects.get_or_create(user=request.user.profile, post=post)
 
         return super().get(request, *args, **kwargs)
@@ -122,17 +132,20 @@ class PostRetrieveView(DetailView):
     def post(self, request, *args, **kwargs):
         post = self.get_object()
 
-        data = {
-            'user': request.user.profile,
-            'post': post
-        }
-        like_obj = PostLike.objects.filter(**data).first()
-        like_obj.delete() if like_obj else PostLike.objects.create(**data)
+        if request.user.is_authenticated:
+            data = {
+                'user': request.user.profile,
+                'post': post
+            }
+            like_obj = PostLike.objects.filter(**data).first()
+            like_obj.delete() if like_obj else PostLike.objects.create(**data)
 
-        return redirect(reverse_lazy('blog:post_detail', kwargs={'pk': post.pk}))
+            return redirect(reverse_lazy('blog:post_detail', kwargs={'pk': post.pk}))
+
+        return redirect('accounts:signin')
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, VerificationRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_save.html'
@@ -150,7 +163,7 @@ class PostCreateView(CreateView):
         return reverse_lazy('blog:post_detail', kwargs={'pk': self.object.pk})
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, VerificationRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_save.html'
@@ -180,7 +193,7 @@ class PostUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, VerificationRequiredMixin, DeleteView):
     model = Post
 
     def get_queryset(self):

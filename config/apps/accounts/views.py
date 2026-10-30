@@ -7,6 +7,7 @@ from django.contrib.auth.views import (
     PasswordResetView as DefaultPasswordResetView,
     PasswordResetConfirmView as DefaultPasswordResetConfirmView
 )
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
@@ -152,10 +153,10 @@ class SignOutView(LogoutView):
     def get_success_url(self):
         messages.success(
             self.request,
-            'You have been signed out successfully.',
+            'You have signed out successfully.',
             extra_tags='primary'
         )
-        return reverse_lazy('core:index')
+        return self.request.META.get('HTTP_REFERER', '/')
 
 
 class PasswordChangeView(DefaultPasswordChangeView):
@@ -197,7 +198,7 @@ class ResendPasswordResetView(RedirectView):
     url = reverse_lazy('accounts:reset_password')
 
 
-class FollowView(View):
+class FollowView(LoginRequiredMixin, View):
 
     def post(self, request, pk, *args, **kwargs):
         user = Profile.objects.get(pk=pk)
@@ -238,7 +239,7 @@ class ProfileView(View):
         return render(request, 'auth/profile.html', context)
 
 
-class ProfilePreview(View):
+class ProfilePreview(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
             data = request.user.profile
@@ -256,7 +257,7 @@ class ProfilePreview(View):
             return render(request, 'auth/profile.html', context)
 
 
-class SettingsView(View):
+class SettingsView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         posts = Post.objects.filter(author=request.user.profile)
